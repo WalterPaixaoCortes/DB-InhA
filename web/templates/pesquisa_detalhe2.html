@@ -13,7 +13,7 @@
                   <h1 class="nome_citacao">{{st.pdbTitle}}</h1>
                   <ul class="list" id="tres">
                     {% for item in originator %}
-                      <li><p class="p_citacao">{{item.authors.decode('utf-8').replace(';','; ')}}</p></a></li>
+                      <li><p class="p_citacao">{{item.authors.replace(';','; ')}}</p></a></li>
                       <li><span class="nome_citacao">Journal:</span><p class="p_citacao">({{item.publication_year}}) {{item.journal}}</p></li>
                       <li><span class="nome_citacao">PubMed: </span><p class="p_citacao">{{item.pubmed_id}}</p></li>
                       <li><span class="nome_citacao">PubMed Abstract:</span><p class="p_citacao">({{item.publication_year}}) {{item.journal}}</p></li>
@@ -62,8 +62,8 @@
     <tr > 
          <td class="linha{{ loop.cycle('1', '2') }}">{{item.rank}}</td>
          <td class="linha{{ loop.cycle('1', '2') }}">{{item.pubmed_id}}</td>
-         <td class="linha{{ loop.cycle('1', '2') }}">{% print item.title.decode('utf-8') %}</td> 
-         <td class="linha{{ loop.cycle('1', '2') }}">{{item.authors.decode('utf-8').replace(';','<br>')|safe}}</td> 
+         <td class="linha{{ loop.cycle('1', '2') }}">{% print item.title %}</td> 
+         <td class="linha{{ loop.cycle('1', '2') }}">{{item.authors.replace(';','<br>')|safe}}</td> 
          <td class="linha{{ loop.cycle('1', '2') }}">{{item.publication_date|datetime}}</td> 
          <td class="linha{{ loop.cycle('1', '2') }}"><a href="{{item.pubmed_url}}" target="_blank"><img src="../static/images/file_pdf.png"></a></li></td> 
     </tr>
@@ -99,46 +99,4 @@
   <div class="clr"></div>
   <div class="clr"></div>
 
-  <div class="fbg">
-    <div class="fbg_resize">
-      <div class="col_mapa">
-
- <h2><span>LABIO</span></h2>
-        <p>Laboratório de Bioinformática, Modelagem e Simulação de Biossistemas</p>
-        Faculdade de Informática – PUCRS
-        <p class="contact_info"> <span>Endereço:</span> Bairro Partenon - Porto Alegre - RS - Brasil<br />
-          <span>CEP:</span>90619-900<br />
-<span>Telefone:</span>+55-51-3320-3611<br />
-          <span>FAX:</span> +55-51-3320-3621<br />
-      </div>
-
-<div class="col_mapa">
-
- <h2><span>Navegação</span></h2>
-      
- <div id="mapa_site">
-                  <ul class="list" id="um">
-                    <li><a href="{{ url_for('index')}}">Home</a></li>
-                    <li><a href="{{ url_for('pesquisa')}}">Pesquisa</a></li>
-                    <li><a href="{{ url_for('artigos')}}">Artigos</a></li>
-                    <li><a href="{{ url_for('equipe')}}">Equipe</a></li>
-                    <li><a href="{{ url_for('fale_conosco')}}">Fale conosco</a></li>
-                  </ul>
-          
-                <h3>Links</h3>
-                  <ul class="list" id="dois">
-                    <li><a class="col_footer2" href="http://www.labio.org/" title="link Laboratório de Bioinformática, Modelagem e Simulação de Biossistemas - LABIO">Laboratório de Bioinformática, Modelagem e Simulação de Biossistemas - LABIO</a></li></br>
-                    <li><a class="col_footer2" href="http://www3.pucrs.br/portal/page/portal/facinppg/ppgcc/" title="link Programa de Pós-Graduação em Ciência da Computação - PPGCC">Programa de Pós-Graduação em Ciência da Computação - PPGCC</a></li></br>
-                    <li><a class="col_footer2" href="http://www.pucrs.br/portal/" title="Pontifícia Universidade Católica do Rio Grande do Sul - PUCRS ">Pontifícia Universidade Católica do Rio Grande do Sul - PUCRS</a></li></br>
-                  </ul>
-          
-        </div><!--Fim div footer_left-->
-        </div><!-- Fim div mapa do site -->
-
-</div>
-
-
-      <div class="clr"></div>
-    </div>
-  </div>  
 {% endblock %}

@@ -63,6 +63,18 @@ def artigos():
 def equipe():
     return render_template ('equipe.html')
 
+@app.route ('/sobre/')
+def sobre():
+    return render_template ('equipe.html')
+
+@app.route ('/citacao/')
+def citacao():
+    return render_template ('equipe.html')
+
+@app.route ('/ajuda/')
+def ajuda():
+    return render_template ('equipe.html')
+
 @app.route ('/fale_conosco/')
 def fale_conosco():
     return render_template ('fale_conosco.html',messages=None) 
@@ -207,7 +219,7 @@ def get_structure(pdbid):
 			db2 = labio.dbWrapper.dbGenericWrapper(fileConfig.database).getDB()
 
 			if db2.isDatabaseOpen():
-				cursor = db2.getData(fileConfig.sqlGetStructure,(pdbid))
+				cursor = db2.getData(fileConfig.sqlGetStructure,[pdbid])
 				row = cursor.fetchall ()
 				cursor.close ()
 				db2.close ()
@@ -232,9 +244,9 @@ def get_related_articles(pdbid,rel_type):
 
 			if db2.isDatabaseOpen():
 				if rel_type == 'Originator':
-					cursor = db2.getData(fileConfig.sqlGetRelatedArticlesOriginator,(pdbid))
+					cursor = db2.getData(fileConfig.sqlGetRelatedArticlesOriginator,[pdbid])
 				else:
-					cursor = db2.getData(fileConfig.sqlGetRelatedArticles,(pdbid))
+					cursor = db2.getData(fileConfig.sqlGetRelatedArticles,[pdbid])
 				row = cursor.fetchall ()
 				cursor.close ()
 				db2.close ()
@@ -258,7 +270,7 @@ def get_ligands(pdbid):
 			db2 = labio.dbWrapper.dbGenericWrapper(fileConfig.database).getDB()
 
 			if db2.isDatabaseOpen():
-				cursor = db2.getData(fileConfig.sqlGetLigands,(pdbid))
+				cursor = db2.getData(fileConfig.sqlGetLigands,[pdbid])
 				row = cursor.fetchall ()
 				cursor.close ()
 				db2.close ()
@@ -282,7 +294,7 @@ def get_go_terms(pdbid):
 			db2 = labio.dbWrapper.dbGenericWrapper(fileConfig.database).getDB()
 
 			if db2.isDatabaseOpen():
-				cursor = db2.getData(fileConfig.sqlGetGoTerms,(pdbid))
+				cursor = db2.getData(fileConfig.sqlGetGoTerms,[pdbid])
 				row = cursor.fetchall ()
 				cursor.close ()
 				db2.close ()

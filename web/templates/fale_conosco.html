@@ -1,106 +1,112 @@
-{% set active_page = "fale_conosco" %}
-{% extends "template.html" %}
+{% set active_page = "fale_conosco" %} 
+{% extends "template.html" %} 
 {% block content %}
-
-      <div class="clr"></div>
-      
-  <div class="content">
-    <div class="content_resize">
-      <div class="mainbar">
-        <div class="article">
-          <h2><span>Contato:</span></h2>
-          <div class="clr"></div>
-         
-        </div>
-        <div class="article">
-          <div class="clr"></div>
-          {{ messages['main'] }}
-          <form action="/send/email" method="post" id="sendemail">
-            <ol>
-              <li>
-                <label for="name">Nome:<span style="color:red;">*</span></label>
-                <input type="text" id="name" name="name" class="text" />
-              </li>
-              <li>
-                <label for="email">E-mail:<span style="color:red;">*</span></label>
-                <input type="email"  required="" id="email" name="email" class="text" placeholder="E-mail" title="E-mail" onfocus="if(this.placeholder==this.title)this.placeholder='';" onblur="if(this.placeholder=='')this.placeholder=this.title;"/>
-              </li>
-              <li>
-              <label for="name">Assunto:<span style="color:red;">*</span></label>
-              <select required="" id="assunto" name="assunto" class="text"/> 
-                    <option style="color:gray;"value="" disabled selected>Selecione sua opção</option>
-                    <option value="Ajuda">Ajuda</option>
-                    <option value="Contato">Contato</option>
-                    <option value="Sugestao">Sugestão</option>
-                    <option value="Reclamacao">Reclamação</option>
-                    <option value="Outro">Outro</option>
-                </select><!-- Fim select -->
-              </li>
-
-
-              <li>
-                <label for="message">Mensagem:<span style="color:red;">*</span></label>
-                <textarea id="message" name="message" rows="8" cols="50"></textarea>
-              </li>
-              <li>
-  <li>
-                 <input type="submit" value="Enviar"/>
-              </li>
-            
-                                </form>
-                <div class="clr"></div>
-              </li>
-            </ol>
-          </form>
-        </div>
+<div class="clr"></div>
+<div class="clr"></div>
+<div class="content">
+  <div class="content_resize">
+    <div class="mainbar">
+      <div class="article">
+        <h2>
+          <span>Contato:</span>
+        </h2>
+        <div class="clr"></div>
       </div>
-      <div class="clr"></div>
+      <div class="article">
+        <div class="clr"></div>
+        {{ messages['main'] }}
+        <form action="/send/email" method="post" id="sendemail">
+          <ol>
+            <li>
+              <label for="name">Nome:
+                <span style="color:red;">*</span>
+              </label>
+              <input type="text" id="name" name="name" class="text" />
+            </li>
+            <li>
+              <label for="email">E-mail:
+                <span style="color:red;">*</span>
+              </label>
+              <input type="email" required="" id="email" name="email" class="text" placeholder="E-mail" title="E-mail" onfocus="if(this.placeholder==this.title)this.placeholder='';"
+              onblur="if(this.placeholder=='')this.placeholder=this.title;" />
+            </li>
+            <li>
+              <label for="name">Assunto:
+                <span style="color:red;">*</span>
+              </label>
+              <select required="" id="assunto" name="assunto" class="text" />
+              <option style="color:gray;" value="" disabled selected>Selecione sua opção</option>
+              <option value="Ajuda">Ajuda</option>
+              <option value="Contato">Contato</option>
+              <option value="Sugestao">Sugestão</option>
+              <option value="Reclamacao">Reclamação</option>
+              <option value="Outro">Outro</option>
+              </select>
+              <!-- Fim select -->
+            </li>
+            <li>
+              <label for="message">Mensagem:
+                <span style="color:red;">*</span>
+              </label>
+              <textarea id="message" name="message" rows="8" cols="50"></textarea>
+            </li>
+            <li>
+              <input type="submit" value="Enviar" />
+            </li>
+          </ol>
+        </form>
+        <div class="clr"></div>
+      </div>
     </div>
-  </div>
-  <div class="fbg">
-    <div class="fbg_resize">
-
-<div class="col_mapa">
-
- <h2><span>LABIO</span></h2>
-        <p>Laboratório de Bioinformática, Modelagem e Simulação de Biossistemas</p>
-        Faculdade de Informática – PUCRS
-        <p class="contact_info"> <span>Endereço:</span> Bairro Partenon - Porto Alegre - RS - Brasil<br />
-          <span>CEP:</span>90619-900<br />
-<span>Telefone:</span>+55-51-3320-3611<br />
-          <span>FAX:</span> +55-51-3320-3621<br />
+    <div class="sidebar">
+      <div class="gadget">
+        <h2 class="star">
+          <span>Site</span>
+        </h2>
+        <div class="clr"></div>
+        <ul class="sb_menu">
+          <li>
+            <a href="{{ url_for('index')}}">Home</a>
+          </li>
+          <li>
+            <a href="{{ url_for('pesquisa')}}">Pesquisa</a>
+          </li>
+          <li>
+            <a href="{{ url_for('artigos')}}">Artigos</a>
+          </li>
+          <li>
+            <a href="{{ url_for('equipe')}}">Equipe</a>
+          </li>
+          <li>
+            <a href="{{ url_for('fale_conosco')}}">Fale Conosco</a>
+          </li>
+        </ul>
       </div>
-
-
-
-<div class="col_mapa">
-
- <h2><span>Mapa</span></h2>
-      
- <div id="mapa_site">
-                  <iframe width="400" height="280" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://maps.google.com.br/maps?f=q&amp;source=s_q&amp;hl=pt-BR&amp;geocode=&amp;q=Rua+Porto+Alegre,+90619-900,+Ipiranga,+Rio+Grande+do+Sul&amp;aq=1&amp;oq=+90619-900+porto+alegre+avenida+ipira&amp;sll=-30.061355,-51.152043&amp;sspn=0.003821,0.004839&amp;t=m&amp;ie=UTF8&amp;hq=&amp;hnear=&amp;ll=-30.060472,-51.175532&amp;spn=0.006295,0.006295&amp;output=embed"></iframe><br /><small><a href="https://maps.google.com.br/maps?f=q&amp;source=embed&amp;hl=pt-BR&amp;geocode=&amp;q=Rua+Porto+Alegre,+90619-900,+Ipiranga,+Rio+Grande+do+Sul&amp;aq=1&amp;oq=+90619-900+porto+alegre+avenida+ipira&amp;sll=-30.061355,-51.152043&amp;sspn=0.003821,0.004839&amp;t=m&amp;ie=UTF8&amp;hq=&amp;hnear=&amp;ll=-30.060472,-51.175532&amp;spn=0.006295,0.006295" style="color:#ffffff;text-align:left">Exibir mapa ampliado</a></small>
-        </div><!-- Fim div mapa do site -->
-
-
-
-
-
-
-
-
- 
-       
-  
-</div>
-
-
-
-</div>
-      <div class="clr"></div>
-     
-      <div class="clr"></div>
-
+      <div class="gadget">
+        <h2 class="star">
+          <span>Documentação</span>
+        </h2>
+        <div class="clr"></div>
+        <ul class="ex_menu">
+          <li>
+            <a href="{{ url_for('sobre')}}">Sobre Nós</a>
+            <br />
+          </li>
+          <li>
+            <a href="{{ url_for('citacao')}}">Citação</a>
+            <br/>
+          </li>
+          <li>
+            <a href="{{ url_for('ajuda')}}">Ajuda</a>
+            <br/>
+          </li>
+          <img class="logo_labio" src="../static/images/logo_pucrs.jpg"></img>
+        </ul>
+      </div>
+    </div>
+    <div class="clr"></div>
   </div>
-  
+</div>
+<div class="clr"></div>
+<div class="clr"></div>
 {% endblock %}
-        

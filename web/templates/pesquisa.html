@@ -1,109 +1,52 @@
 {% set active_page = "pesquisa" %}
 {% extends "template.html" %}
 {% block content %}
-      <div class="clr"></div>
-     
-      </div>
-      <div class="clr"></div>
-    </div>
+<div class="clr"></div>
+<div class="clr"></div>
+<div class="content">
+  <div class="content_resize2">
+    <h2 style="text-align:center;">Pesquisar</h2>
+    <fieldset style="margin-left: 15%;">
+        <form id="formsearch" name="formsearch" method="post" action="#">
+          <span style="background: transparent;margin-top:3px;">Pesquisar por:&nbsp;</span>
+          <span>
+            <select name="select_search" id="select_search" class="editbox_search">
+              <option selected value="1">Todos</option>
+              <option value="2">Estrutura</option>
+              <option value="3">Título</option>
+              <option value="4">Autores</option>
+            </select>
+            </span>
+          <span>
+            <input name="editbox_search" class="editbox_search" id="editbox_search" maxlength="120" value="Digite a estrutura, pedaço do título ou do nome de um dos autores..." type="text" />
+          </span>
+          <input name="button_search" src="../static/images/search.gif" class="button_search" type="image" />
+        </form>    
+    </fieldset>
+    <table class="artigos">
+      <thead> 
+          <tr> 
+            <th id="coluna1"> Estrutura </th> 
+            <th id="coluna3"> Título </th>
+            <th id="coluna2"> Autores</th> 
+            <th id="coluna2"> Data de Submissão </th> 
+            <th id="coluna1"> Link </th> 
+          </tr> 
+      </thead> 
+      <tbody>
+          {% for item in struts %}
+          <tr > 
+               <td class="linha{{ loop.cycle('1', '2') }}"><a href="/pesquisa/{{item.pdbID}}">{{item.pdbID}}</a></td>
+               <td class="linha{{ loop.cycle('1', '2') }}">{{item.pdbTitle|title}}</td> 
+               <td class="linha{{ loop.cycle('1', '2') }}">{{item.pdbAuthors|replace(',','<br>')|safe}}</td> 
+               <td class="linha{{ loop.cycle('1', '2') }}">{{item.pdbDepositionDate|datetime}}</td> 
+               <td class="linha{{ loop.cycle('1', '2') }}"><a href="http://www.rcsb.org/pdb/download/downloadFile.do?fileFormat=pdb&compression=NO&structureId={{item.pdbID}}"><img src="../static/images/file_pdf.png"></a></li></td> 
+          </tr>
+          {% endfor %}
+      </tbody>
+    </table>
+    <div class="clr"></div>
+    <div class="clr"></div>
   </div>
-  <div class="content">
-    <div class="content_resize2">
- 
-
-<h2 style="text-align:center;">Pesquisar</h2>
-
-<fieldset>
-<form action="#" method="post" id="sendemail">
-            <ol>
-              <li>
-                <label for="name">Proteína:<span style="color:red;">*</span></label>
-                <input type="text" id="name" name="name" class="text" name="email"  placeholder="Nome da proteína, ID, autor..." title="Nome da proteína ID, autor..." onfocus="if(this.placeholder==this.title)this.placeholder='';" onblur="if(this.placeholder=='')this.placeholder=this.title;"/>
-              </li>
-             
-                 <input type="submit" value="Buscar"/>
-
-              </li>
-            
-                                </form>
-
-</fieldset>
-
-<table class="artigos">
-<thead> 
-    <tr> 
-      <th id="coluna1"> Estrutura </th> 
-      <th id="coluna3"> Título </th>
-      <th id="coluna2"> Autores</th> 
-      <th id="coluna2"> Data de Submissão </th> 
-      <th id="coluna1"> Link </th> 
-    </tr> 
-</thead> 
-<tbody>
-    {% for item in struts %}
-    <tr > 
-         <td class="linha{{ loop.cycle('1', '2') }}"><a href="/pesquisa/{{item.pdbID}}">{{item.pdbID}}</a></td>
-         <td class="linha{{ loop.cycle('1', '2') }}">{{item.pdbTitle|title}}</td> 
-         <td class="linha{{ loop.cycle('1', '2') }}">{{item.pdbAuthors|replace(',','<br>')|safe}}</td> 
-         <td class="linha{{ loop.cycle('1', '2') }}">{{item.pdbDepositionDate|datetime}}</td> 
-         <td class="linha{{ loop.cycle('1', '2') }}"><a href="http://www.rcsb.org/pdb/download/downloadFile.do?fileFormat=pdb&compression=NO&structureId={{item.pdbID}}"><img src="../static/images/file_pdf.png"></a></li></td> 
-    </tr>
-    {% endfor %}
-</tbody>
-</table>
-
-<div class="transparent"></div>
 </div>
-</div>
-       
-          <div class="clr"></div>
-
-      <div class="clr"></div>
-    </div>
-  </div>
-  <div class="fbg">
-    <div class="fbg_resize">
-      <div class="col_mapa">
-
- <h2><span>LABIO</span></h2>
-        <p>Laboratório de Bioinformática, Modelagem e Simulação de Biossistemas</p>
-        Faculdade de Informática – PUCRS
-        <p class="contact_info"> <span>Endereço:</span> Bairro Partenon - Porto Alegre - RS - Brasil<br />
-          <span>CEP:</span>90619-900<br />
-<span>Telefone:</span>+55-51-3320-3611<br />
-          <span>FAX:</span> +55-51-3320-3621<br />
-      </div>
-
-<div class="col_mapa">
-
- <h2><span>Navegação</span></h2>
-      
- <div id="mapa_site">
-                  <ul class="list" id="um">
-                    <li><a href="{{ url_for('index')}}">Home</a></li>
-                    <li><a href="{{ url_for('pesquisa')}}">Pesquisa</a></li>
-                    <li><a href="{{ url_for('artigos')}}">Artigos</a></li>
-                    <li><a href="{{ url_for('equipe')}}">Equipe</a></li>
-                    <li><a href="{{ url_for('fale_conosco')}}">Fale conosco</a></li>
-                  </ul>
-          
-                <h3>Links</h3>
-                  <ul class="list" id="dois">
-                    <li><a class="col_footer2" href="http://www.labio.org/" title="link Laboratório de Bioinformática, Modelagem e Simulação de Biossistemas - LABIO">Laboratório de Bioinformática, Modelagem e Simulação de Biossistemas - LABIO</a></li></br>
-                    <li><a class="col_footer2" href="http://www3.pucrs.br/portal/page/portal/facinppg/ppgcc/" title="link Programa de Pós-Graduação em Ciência da Computação - PPGCC">Programa de Pós-Graduação em Ciência da Computação - PPGCC</a></li></br>
-                    <li><a class="col_footer2" href="http://www.pucrs.br/portal/" title="Pontifícia Universidade Católica do Rio Grande do Sul - PUCRS ">Pontifícia Universidade Católica do Rio Grande do Sul - PUCRS</a></li></br>
-                  </ul>
-          
-        </div><!--Fim div footer_left-->
-        </div><!-- Fim div mapa do site -->
-
-</div>
-
-
-      <div class="clr"></div>
-    </div>
-  </div>
-
-
-  
 {% endblock %}

@@ -1,0 +1,202 @@
+{% set active_page = active_page|default('index') -%}
+<!DOCTYPE html>
+<html lang="pt-br">
+
+
+
+<!--========================== HEAD HTML -> CABEÇALHO DE INSTRUÇÕES =======================-->
+<head><!--cabeçalho-->
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>WCReF</title>
+<link href="../static/css/reset.css" rel="stylesheet"/>
+<link href="../static/css/layout.css" rel="stylesheet"/>
+<link href="../static/css/style.css" rel="stylesheet"/>
+<link href="../static/css/template_css.css" rel="stylesheet"/>
+
+{% block css %}
+{% endblock %}
+
+<script src="../static/js/script.js"></script>
+<script>document.createElement("article");</script>
+
+<!--[if lt IE 9]>
+<script>
+  var e = ("abbr,article,aside,audio,canvas,datalist,details," +
+    "figure,footer,header,hgroup,mark,menu,meter,nav,output," +
+    "progress,section,time,video").split(',');
+  for (var i = 0; i < e.length; i++) {
+    document.createElement(e[i]);
+  }
+</script>
+<![endif]--> <!--sript para versões mais antigas do IE para o HTML5-->
+   
+
+
+
+</head><!--fim do cabeçalho-->
+
+<!--========================== BODY HTML -> INICIO DO SITE ===============================-->
+<body><!--corpo do site-->
+
+<!--========================== HEADER -> CABEÇALHO DO SITE ===============================-->
+<header> 
+    <div class="left" id="logo">
+            <img class="brasao_puc" src="../static/images/logo_puc.png"></img>
+            <img class="logo_cref" src="../static/images/logocrefw.png"></img>
+        <div id="topo">
+          <h1 id="titulo">WCReF</h1>    
+        </div>
+
+        <div id="identificacao">
+              <div id="tituloh2">
+              <h2 id="titulo">Central Residue Fragment-based Method</h2>
+        </div>    
+
+        <div id="grupo_pesquisa">
+              <form method="get" action="/search" id="search">
+                <input type="search" required="" id="pesquisa">
+                 <input type="submit" id="button_search" value=""/>
+            </form>  
+        </div>
+ <!--  .................................janela modal.....................................-->
+
+        <a id="botao_login" href="#abrirModal">Login</a>
+
+        <div id="abrirModal" class="modalDialog borda_azul">
+              <div><a class="close" title="Fechar" href="#close">X</a>
+                <fieldset id="modal_login">   
+                    <form name="formulario_login" action="#" method="post">
+                        <div class="campoinput">
+                                <h1 style="color:#f29736;">Login</h1>
+                            <div class="campoinput_modal"><!-- controla a janela do modal e o tamanho dos formulários nas páginas que tem form. -->
+                                <label for="email">E-mail:<span style="color:red;">*</span></label>
+                                <input  type="email" required="" id="email_login" name="email" placeholder="E-mail" title="E-mail" onfocus="if(this.placeholder==this.title)this.placeholder='';" onblur="if(this.placeholder=='')this.placeholder=this.title;"/>
+                            </div>
+                            <div class="campoinput_modal"><!-- controla a janela do modal e o tamanho dos formulários nas páginas que tem form. -->
+                              <label for="senha">Senha:<span style="color:red;">*</span></label>
+                              <input type="password" id="senha_login" name="password" placeholder="Senha" required="" id="password"/></br>
+                            </div>
+                          <input type="submit" value="Login"/>
+                        </div><!-- Fim div campoinput-->
+                    </form><!-- Fim form login-->
+                </fieldset><!--Fim do fieldset login-->
+
+                            <div id="esqueceu_senha">
+                                  <a id="login" href="#abrirModal2">Esqueceu sua senha?</a>
+                                  <a id="login" href="{{ url_for('cadastro')}}">Registre-se</a>
+                            </div><!-- Fim div-->
+            </div><!--Fim div close-->
+      </div><!--Fim div abrir modal-->
+
+<!--..................................... Janela modal de envio de senha......................-->
+
+              <div id="abrirModal2" class="modalDialog borda_azul">
+
+                  <div><a class="close" title="Fechar" href="#close">X</a>
+                    <fieldset id="modal_senha">   
+                      <form name="formulario_login" action="#" method="post">
+                          <div class="campoinput_modal">
+                                <h3> Esqueceu sua senha?</h3></br>
+                                <p style="margin-left: 0.0em; font-size: 1.3em;">Digite seu email abaixo para que sua senha seja enviada a você.</p></br>
+                                <form name="formulariocadastro" action="#" method="post">  
+                                    <div class="campoinput">
+                                          <label for="email">Email:</label>
+                                          <input type="email" required="" id="email2" name="email_senha" placeholder="E-mail" title="E-mail" onfocus="if(this.placeholder==this.title)this.placeholder='';" onblur="if(this.placeholder=='')this.placeholder=this.title;"/></br>
+                                    </div><!-- Fim da div campoinput -->
+                                    <input type="submit" value="Enviar"/>
+                                </form><!-- Fim form login-->
+                    </fieldset><!--Fim do fieldset login-->
+                  </div><!-- Fim da div close -->
+              </div><!-- Fim da div abrilModal2 -->
+          </div><!-- Fim login-->
+      </div> <!--Fim div logo-->
+</header><!--Fim header/cabeçalho-->
+
+<!--..................................... NAV HTML -> MENU HORIZONTAL......................-->
+  <nav id="menu_horizontal">
+      <ul class="drop_down"><!--Fim nav1-->
+         <li {% if "index" == active_page %}  class="ative" {% else %} class="nav" {% endif %} ><a  {% if "index" == active_page %}  class="menu2" {% else %} class="menu" {% endif %} href="{{ url_for('index')}}"><img class="icon" src="../static/images/home.png">Home</a></li>{{ caption|e }}
+        <li {% if "cadastro" == active_page %}  class="ative" {% else %} class="nav" {% endif %} ><a  {% if "cadastro" == active_page %}  class="menu2" {% else %} class="menu" {% endif %} href="{{ url_for('cadastro')}}"><img class="icon" src="../static/images/account_and_control.png">Cadastro</a></li>{{ caption|e }}
+        <li {% if "submissoes" == active_page %}  class="ative" {% else %} class="nav" {% endif %} ><a  {% if "submissoes" == active_page %}  class="menu2" {% else %} class="menu" {% endif %} href="{{ url_for('submissoes')}}"><img class="icon" src="../static/images/ftp.png">Submissões</a></li>{{ caption|e }}
+        <li {% if "documentacao" == active_page or "ajuda" == active_page or "artigos" == active_page or "softwares" == active_page or "sobre_o_cref" == active_page %}  class="ative" {% else %} class="nav" {% endif %} ><a  {% if "documentacao" == active_page %}  class="menu2" {% else %} class="menu" {% endif %} href="{{ url_for('documentacao')}}"><img class="icon" src="../static/images/defult_doc.png">Documentação</a>
+
+                  <ul>
+                      <li id="li_drop_down" style ="margin-top: 0.6em;"><a class="drop_down"  href="{{ url_for('sobre_o_cref')}}"><img class="icon3" src="../static/images/couple_help.png">Sobre o CReF</a></li>
+                      <li id="li_drop_down"><a class="drop_down" href="{{ url_for('artigos')}}"><img class="icon3" src="../static/images/contract2_info.png">Artigos</a></li>
+                      <li id="li_drop_down"><a class="drop_down" href="{{ url_for('softwares')}}"><img class="icon3" src="../static/images/download_gear.png">Softwares</a></li>
+                      <li id="li_drop_down"><a class="drop_down" href="{{ url_for('ajuda')}}"><img class="icon3" src="../static/images/anonymous_help.png">Ajuda</a></li>      
+                </ul>
+            </li>
+        </li>{{ caption|e }}
+        <li {% if "equipe" == active_page %}  class="ative" {% else %} class="nav" {% endif %} ><a  {% if "equipe" == active_page %}  class="menu2" {% else %} class="menu" {% endif %} href="{{ url_for('equipe')}}"><img class="icon" src="../static/images/user-icon.png">Equipe</a></li>{{ caption|e }}
+        <li {% if "fale_conosco" == active_page %}  class="ative" {% else %} class="nav" {% endif %} ><a  {% if "fale_conosco" == active_page %}  class="menu2" {% else %} class="menu" {% endif %} href="{{ url_for('fale_conosco')}}"><img class="icon" src="../static/images/mail_2.png">Fale Conosco</a></li>{{ caption|e }}
+      </ul><!--Fim ul footer-->
+  </nav><!--Fim nav_menuhorizontal-->
+
+  <!--==========================  HTML -> CONTEÚDO DO SITE ===============================-->
+
+            {% block content %}<!--conteúdo da página-->
+            {% endblock %}
+
+<!--========================== FOOTER HTML -> RODAPÉ DO SITE ===============================-->
+<footer>
+    <div class="content_footer">
+      <div class="efeito_barra"></div><!--Fim div-->
+
+        <div id="footer_right">
+            <img  class="logos_footer" src="../static/images/logomarcafabio.jpg" align="left"  title="Faculdade de Biociências" alt="Logomarca da Faculdade de Biociências">
+            <img  class="logos_footer" src="../static/images/faculdade_de_farmacia.jpg" align="left"  title="Faculdade de Farmárcia" alt="Logomarca da Faculdade de Farmácia">
+        </div><!--Fim div footer_right-->
+
+        <div id="footer_right">
+            <img  class="logos_footer" src="../static/images/logo_pucrs.jpg" align="left"  title="Pontifícia Universidade Católica do Rio Grande do Sul - PUCRS" alt="Logomarca da Pontifícia Universidade Católica do Rio Grande do Sul - PUCRS">
+            <img  class="logos_footer" src="../static/images/LogoFACIN.jpg" align="left"  title="Faculdade de Informática" alt="Logomarca da Faculdade de Informática">
+        </div><!--Fim div footer_right-->
+
+        <div id="footer_center">
+            <img  id="logo_labio" src="../static/images/logo_labio.png" align="left"  title="Logo Labio" alt="Logo do Laboratório de Bioinformática, Modelagem e Simulação de Biossistemas (LABIO)">
+        </div><!--Fim div footer_center-->
+
+        <div id="footer_left">
+            <article class="col_footer">
+                <h3>Navegação</h3>
+                  <ul class="list" id="um">
+                    <li><a href="{{ url_for('index')}}">Home</a></li>
+                    <li><a href="{{ url_for('cadastro')}}">Cadastro</a></li>
+                    <li><a href="{{ url_for('submissoes')}}">Submissões</a></li>
+                    <li><a href="{{ url_for('documentacao')}}">Documentação</a></li>
+                    <li><a href="{{ url_for('fale_conosco')}}">Fale conosco</a></li>
+                     <li><a href="{{ url_for('pagina_inicial')}}">Teste</a></li>
+                  </ul>
+            </article><!--Fim article col_footer-->
+
+            <article class="col_footer">
+                <h3>Documentação</h3>
+                  <ul class="list" id="um">
+                    <li><a href="{{ url_for('sobre_o_cref')}}">Sobre o CReF </a></li>
+                    <li><a href="{{ url_for('artigos')}}">Artigos</a></li>
+                    <li><a href="{{ url_for('softwares')}}">Softwares </a></li>
+                    <li><a href="{{ url_for('ajuda')}}">Ajuda </a></li>
+                  </ul>
+            </article><!--Fim article col_footer-->
+
+            <article class="col_footer2">
+                <h3 style="color:black;">Links</h3>
+                  <ul class="list" id="dois">
+                    <li><a class="col_footer2" href="http://www.labio.org/" title="link Laboratório de Bioinformática, Modelagem e Simulação de Biossistemas - LABIO">Laboratório de Bioinformática, Modelagem e Simulação de Biossistemas - LABIO</a></li></br>
+                    <li><a class="col_footer2" href="http://www3.pucrs.br/portal/page/portal/facinppg/ppgcc/" title="link Programa de Pós-Graduação em Ciência da Computação - PPGCC">Programa de Pós-Graduação em Ciência da Computação - PPGCC</a></li></br>
+                    <li><a class="col_footer2" href="http://www.pucrs.br/portal/" title="Pontifícia Universidade Católica do Rio Grande do Sul - PUCRS ">Pontifícia Universidade Católica do Rio Grande do Sul - PUCRS</a></li></br>
+                  </ul>
+            </article><!--Fim article col_footer2-->
+        </div><!--Fim div footer_left-->
+
+    </div><!--Fim div content_footer-->
+
+    <div id="copyright">
+      <p id="p_footer">Pontifícia Universidade Católica do Rio Grande do Sul - PUCRS </br>
+                      © Copyright 2007-2008 PUCRS.  Todos os direitos reservados. </br>
+      </p>
+    </div><!--Fim div copyright-->
+
+  </footer><!--Fim fotter/rodapé-->
+</html><!--Fim documento html-->

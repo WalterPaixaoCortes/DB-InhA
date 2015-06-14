@@ -350,7 +350,7 @@ p.infopost a {
 }
 .fbg h2 {
 	color:#b6b6b6;
-	padding-bottom:24px;
+	padding-bottom:2px;
 }
 .fbg img.gal {
 	margin:0 8px 8px 0;
@@ -469,11 +469,23 @@ ol li .send {
 	float:left;
 	background:url(../images/search_bg.gif) no-repeat left top;
 }
+#formsearch select.editbox_search {
+	margin:0;
+	padding:8px 6px;
+	float:left;
+	width:120px;
+	font-size:12px;
+	line-height:14px;
+	color:#aeaeae;
+	background:none;
+	outline:none;
+	border:none;
+}
 #formsearch input.editbox_search {
 	margin:0;
 	padding:8px 6px;
 	float:left;
-	width:174px;
+	width:300px;
 	font-size:12px;
 	line-height:14px;
 	color:#aeaeae;
@@ -746,6 +758,7 @@ div#content_struct {
 div#content_struct2 {
 	width: 100%;
 	margin-left: 10px;
+	margin-right: 10px;
 	margin-bottom: 20px;
 }
 
@@ -794,7 +807,7 @@ div#tabela1{
 }
 
 div#content_img{
-	width: 270px;
+	width: 290px;
 	float: right;
 	height: 100%;
 	margin-left: 4px;
@@ -803,8 +816,8 @@ div#content_img{
 
 div.content_molecula{
 background-color: white;
-width: 100%;
-height: 100%; 
+width: 90%;
+height: 100%; 	
 }
 
 img#img_molecula_pdb{
