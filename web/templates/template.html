@@ -1,0 +1,60 @@
+{% set active_page = active_page|default('index') -%}
+<!DOCTYPE html>
+<html lang="pt-br">
+
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<title>DB-InhA</title>
+<link href="../static/css/style.css" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" type="text/css" href="../static/css/coin-slider.css" />
+<script type="text/javascript" src="../static/js/cufon-yui.js"></script>
+<script type="text/javascript" src="../static/js/droid_sans_400-droid_sans_700.font.js"></script>
+<script type="text/javascript" src="../static/js/jquery-1.4.2.min.js"></script>
+<script type="text/javascript" src="../static/js/script.js"></script>
+<script type="text/javascript" src="../static/js/coin-slider.min.js"></script> 
+</head>
+
+<body>
+<div class="main">
+  <div class="header">
+<div class="left" id="logo">
+            <img class="brasao_puc" src="../static/images/labio.png"></img>
+    
+        </div>
+
+
+    <div class="header_resize">
+
+
+
+
+      <div class="logo">
+        <h1><a href="index.html">DB<span>-InhA</span> <small><span>Banco de Dados Terciário de Bioinformática para a Enzima InhA</span></small></a></h1>
+      </div>
+      <div class="clr"></div>
+      <div class="menu_nav">
+        <ul>
+          <li {% if "index" == active_page %} class="active" {% endif %}><a href="{{ url_for('index')}}"><span>Home</span></a></li>{{ caption|e }}
+          <li {% if "pesquisa" == active_page %} class="active" {% endif %}><a href="{{ url_for('pesquisa')}}"><span>Pesquisa</span></a></li>{{ caption|e }}
+          <li {% if "artigos" == active_page %} class="active" {% endif %}><a href="{{ url_for('artigos')}}"><span>Artigos</span></a></li>{{ caption|e }}
+          <li {% if "equipe" == active_page %} class="active" {% endif %}><a href="{{ url_for('equipe')}}"><span>Equipe</span></a></li>{{ caption|e }}
+          <li {% if "fale_conosco" == active_page %} class="active" {% endif %}><a href="{{ url_for('fale_conosco')}}"><span>Fale Conosco</span></a></li>{{ caption|e }} 
+        </ul>
+      </div>
+  <!--==========================  HTML -> CONTEÚDO DO SITE ===============================-->
+
+            {% block content %}<!--conteúdo da página-->
+            {% endblock %}
+
+<!--========================== FOOTER HTML -> RODAPÉ DO SITE ===============================-->
+<div class="footer">
+    <div class="footer_resize">
+      <p class="lf">Pontifícia Universidade Católica do Rio Grande do Sul - PUCRS<a href="http://www.pucrs.br/portal/" title="Pontifícia Universidade Católica do Rio Grande do Sul - PUCRS">Site da PUCRS</a>.</p>
+      <p class="rf">© Copyright 2007-2008 PUCRS. Todos os direitos reservados.</a></p>
+      <div style="clear:both;"></div>
+    </div>
+  </div>
+</div>
+<div align=center>This template  downloaded form <a href="http://www.pucrs.br/portal/" title="Pontifícia Universidade Católica do Rio Grande do Sul - PUCRS"></a></div></body>
+</html>
