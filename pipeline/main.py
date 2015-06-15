@@ -371,7 +371,7 @@ def Execute(cfgName):
                         relate_structures(fileConfig,nlogging,db2,pmed)
 
                     if fileConfig.Actions['Test'] and not(fileConfig.RunAll):
-                        pmed = pmed.get_pubmed_article('25714709') #25891098 #25850294 25528498
+                        pmed = pmed.get_pubmed_article('25714709')
                         print(pmed)
                                                 
                     db2.commit()
