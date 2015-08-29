@@ -3,7 +3,7 @@ import traceback
 import datetime
 import time
 import os
-import urllib2
+import urllib.request as urllib2
 import json
 import xml2json
 import optparse
@@ -96,18 +96,17 @@ class PubMed():
 				if 'AuthorList' in json_string['PubmedArticleSet']['PubmedArticle']['MedlineCitation']['Article'].keys():
 					def return_name(y):
 						x = None
-						if type(y) == unicode:
+						if isinstance(y,str):
 							x = y
 						else:
 							if 'LastName' in y.keys(): 
 								x = y['LastName'].encode('utf-8','ignore')
 								if 'ForeName' in y.keys():
-									x = x + ', ' + y['ForeName'].encode('utf-8','ignore') 
+									x = x + ', '.encode('utf-8') + y['ForeName'].encode('utf-8','ignore') 
 							else: 
 								x = y['CollectiveName'].encode('utf-8','ignore')
 						return x
-
-					article['authors'] = [ return_name(x) for x in json_string['PubmedArticleSet']['PubmedArticle']['MedlineCitation']['Article']['AuthorList']['Author'] ]
+					article['authors'] = [ return_name(x).decode('utf-8') for x in json_string['PubmedArticleSet']['PubmedArticle']['MedlineCitation']['Article']['AuthorList']['Author'] ]
 				else:
 					article['authors'] = ['No authors informed.']
 				
@@ -161,19 +160,19 @@ class PubMed():
 		return article
 
 	def save_pubmed_article(self,id,article,type):
-	    try:
-	        self.__log.info('Saving Article: %s...' % id)
-	        if type == 'Training':
-	            self.__db.executeCommand(self.__cfg.sqlInsertTrainingSet,(id, article['title'], MySQLdb.escape_string(str(article['content']))))
-	        else:
-	        	if 'error' in article.keys():
-	        		self.__log.error(article['error'])
-	        	else:
-	        		self.__db.executeCommand(self.__cfg.sqlInsertLiterature,(id, article['title'], MySQLdb.escape_string(str(article['content'])),';'.join(article['authors']),article['journal'],article['journal_issn'],article['publication_date'],article['publication_year']))
-	        self.__db.commit()
-	    except:
-	        self.__log.error(traceback.format_exc())
-	        self.__db.rollback()
+		try:
+			self.__log.info('Saving Article: %s...' % id)
+			if type == 'Training':
+				self.__db.executeCommand(self.__cfg.sqlInsertTrainingSet,(id, article['title'], MySQLdb.escape_string(str(article['content']))))
+			else:
+				if 'error' in article.keys():
+					self.__log.error(article['error'])
+				else:
+					self.__db.executeCommand(self.__cfg.sqlInsertLiterature,(id, article['title'], MySQLdb.escape_string(str(article['content'])),';'.join(article['authors']),article['journal'],article['journal_issn'],article['publication_date'],article['publication_year']))
+			self.__db.commit()
+		except:
+			self.__log.error(traceback.format_exc())
+			self.__db.rollback()
 
 	def get_pubmed_full_article(self,item):
 	    result = None

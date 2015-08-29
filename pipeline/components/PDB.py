@@ -3,7 +3,7 @@ import traceback
 import datetime
 import time
 import os
-import urllib2
+import urllib.request as urllib2
 import json
 import xml2json
 import optparse
@@ -17,9 +17,9 @@ __html = ''
 def execute_advanced_query(log, searchUrl, searchQuery):
     result = None
     try:
-        req = urllib2.Request(searchUrl,data=searchQuery)
+        req = urllib2.Request(searchUrl,data=searchQuery.encode('utf-8'))
         f = urllib2.urlopen(req)
-        result = f.read()
+        result = f.read().decode('utf-8')
 
         if result:
             log.info("Found number of PDB entries: %s" % (result.count('\n')))
@@ -116,7 +116,7 @@ def get_file(cfg,log,item):
     try:
         __html = urllib2.urlopen(cfg.pdbGetIdURL.format(item)).read()
         f = open(os.path.join(cfg.extractFilesFolder,item + ".txt"), "w")
-        f.write(__html)
+        f.write(__html.decode('utf-8'))
         f.close()
         return True
     except:

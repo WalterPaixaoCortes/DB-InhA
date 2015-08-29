@@ -14,7 +14,7 @@ import labio.logWrapper
 import labio.dbWrapper
 
 from xml.etree import ElementTree
-from BeautifulSoup import *
+from bs4 import *
 
 from components import PDB
 from components.PubMed import *
@@ -88,7 +88,7 @@ def search_literature(cfg,log,db,pm):
             log.info('Number of entries: %s...' % result['Count'])
             for item in result['IdList']:
                 try:
-                    resCount = db.getData(cfg.sqlCountLiterature, (item))
+                    resCount = db.getData(cfg.sqlCountLiterature % (item))
                     row = resCount.fetchall()
                     if row[0]['cnt'] == 0:
                         article = pm.get_pubmed_article(item)
@@ -96,7 +96,6 @@ def search_literature(cfg,log,db,pm):
                     resCount.close()
                 except:
                     log.error(traceback.format_exc())
-
             db.commit()
         else:
             log.info('No PubMed literature found.')
@@ -321,8 +320,8 @@ def Execute(cfgName):
                         nlogging.info('Retrieving PDB Structures...')
                         final_list = retrieve_structures(fileConfig,nlogging)
                         if final_list:                      
-                            nlogging.info('Number of structures found: %s' % (len(final_list)))
-
+                            #nlogging.info('Number of structures found: %s' % (len(final_list)))
+                            print(final_list)
                             nlogging.info('Adding Candidates to the database...')
                             save_structures(fileConfig,nlogging,db2,final_list)
                         else:
