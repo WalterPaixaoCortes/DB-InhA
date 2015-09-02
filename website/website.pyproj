@@ -18,6 +18,7 @@
     <PythonWsgiHandler>$(MSBuildProjectName).app</PythonWsgiHandler>
     <Name>website</Name>
     <RootNamespace>website</RootNamespace>
+    <NameOfLastUsedPublishProfile>db-inha</NameOfLastUsedPublishProfile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
@@ -36,19 +37,82 @@
     <Folder Include="website\" />
     <Folder Include="website\static\" />
     <Folder Include="website\static\content\" />
+    <Folder Include="website\static\css\" />
     <Folder Include="website\static\fonts\" />
+    <Folder Include="website\static\images\" />
+    <Folder Include="website\static\js\" />
     <Folder Include="website\static\scripts\" />
     <Folder Include="website\templates\" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="website\templates\palavras.html" />
+    <Content Include="website\templates\pesquisa.html" />
+    <Content Include="website\templates\pesquisa_detalhe.html" />
+    <Content Include="website\templates\pesquisa_detalhe2.html" />
+    <Content Include="website\templates\template %282%29.html" />
+    <Content Include="website\templates\template.html" />
+    <Content Include="website\templates\visualizar.html" />
+    <None Include="dbinha.pubxml" />
+    <None Include="db-inha.pubxml" />
     <Content Include="requirements.txt" />
     <Content Include="website\static\content\bootstrap.css" />
     <Content Include="website\static\content\bootstrap.min.css" />
     <Content Include="website\static\content\site.css" />
+    <Content Include="website\static\css\coin-slider.css" />
+    <Content Include="website\static\css\style.css" />
     <Content Include="website\static\fonts\glyphicons-halflings-regular.eot" />
     <Content Include="website\static\fonts\glyphicons-halflings-regular.svg" />
     <Content Include="website\static\fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="website\static\fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="website\static\images\1eny_bio_r_500.jpg" />
+    <Content Include="website\static\images\3d_modelling.jpg" />
+    <Content Include="website\static\images\3d_modelling.png" />
+    <Content Include="website\static\images\content_bg.gif" />
+    <Content Include="website\static\images\file_pdf.png" />
+    <Content Include="website\static\images\gal1.jpg" />
+    <Content Include="website\static\images\gal2.jpg" />
+    <Content Include="website\static\images\gal3.jpg" />
+    <Content Include="website\static\images\gal4.jpg" />
+    <Content Include="website\static\images\gal5.jpg" />
+    <Content Include="website\static\images\gal6.jpg" />
+    <Content Include="website\static\images\img1.jpg" />
+    <Content Include="website\static\images\img2.jpg" />
+    <Content Include="website\static\images\labio.png" />
+    <Content Include="website\static\images\labio.psd" />
+    <Content Include="website\static\images\li.gif" />
+    <Content Include="website\static\images\LOGO LABIO FUNDO TRASNPARENTE .png" />
+    <Content Include="website\static\images\logo_labio.png" />
+    <Content Include="website\static\images\logo_puc.png" />
+    <Content Include="website\static\images\logo_pucrs.jpg" />
+    <Content Include="website\static\images\main_bg.gif" />
+    <Content Include="website\static\images\menu_a.jpg" />
+    <Content Include="website\static\images\menu_p.jpg" />
+    <Content Include="website\static\images\NCBI_logo2.gif" />
+    <Content Include="website\static\images\NCBI_logo2.png" />
+    <Content Include="website\static\images\overlay.png" />
+    <Content Include="website\static\images\PDB-logo-small.jpg" />
+    <Content Include="website\static\images\picture_zoom.png" />
+    <Content Include="website\static\images\rcsb_logo.png" />
+    <Content Include="website\static\images\readmore.jpg" />
+    <Content Include="website\static\images\search.gif" />
+    <Content Include="website\static\images\search.jpg" />
+    <Content Include="website\static\images\search.jps" />
+    <Content Include="website\static\images\search.png" />
+    <Content Include="website\static\images\search_bg.gif" />
+    <Content Include="website\static\images\slide1.jpg" />
+    <Content Include="website\static\images\slide2.jpg" />
+    <Content Include="website\static\images\slide3.jpg" />
+    <Content Include="website\static\images\slide_a.png" />
+    <Content Include="website\static\images\slide_p.png" />
+    <Content Include="website\static\images\spacer.gif" />
+    <Content Include="website\static\images\submit.gif" />
+    <Content Include="website\static\images\ta-mark.png" />
+    <Content Include="website\static\images\userpic.gif" />
+    <Content Include="website\static\js\coin-slider.min.js" />
+    <Content Include="website\static\js\cufon-yui.js" />
+    <Content Include="website\static\js\droid_sans_400-droid_sans_700.font.js" />
+    <Content Include="website\static\js\jquery-1.4.2.min.js" />
+    <Content Include="website\static\js\script.js" />
     <Content Include="website\static\scripts\bootstrap.js" />
     <Content Include="website\static\scripts\bootstrap.min.js" />
     <Content Include="website\static\scripts\jquery-1.10.2.intellisense.js" />
@@ -65,7 +129,12 @@
     <Content Include="website\static\scripts\respond.min.js" />
     <Content Include="website\static\scripts\_references.js" />
     <Content Include="website\templates\about.html" />
+    <Content Include="website\templates\artigos.html" />
     <Content Include="website\templates\contact.html" />
+    <Content Include="website\templates\conteúdo do template.html" />
+    <Content Include="website\templates\equipe.html" />
+    <Content Include="website\templates\estruturas.html" />
+    <Content Include="website\templates\fale_conosco.html" />
     <Content Include="website\templates\index.html" />
     <Content Include="website\templates\layout.html" />
   </ItemGroup>

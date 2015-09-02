@@ -1,0 +1,112 @@
+{% set active_page = "fale_conosco" %} 
+{% extends "template.html" %} 
+{% block content %}
+<div class="clr"></div>
+<div class="clr"></div>
+<div class="content">
+  <div class="content_resize">
+    <div class="mainbar">
+      <div class="article">
+        <h2>
+          <span>Contato:</span>
+        </h2>
+        <div class="clr"></div>
+      </div>
+      <div class="article">
+        <div class="clr"></div>
+        {{ messages['main'] }}
+        <form action="/send/email" method="post" id="sendemail">
+          <ol>
+            <li>
+              <label for="name">Nome:
+                <span style="color:red;">*</span>
+              </label>
+              <input type="text" id="name" name="name" class="text" />
+            </li>
+            <li>
+              <label for="email">E-mail:
+                <span style="color:red;">*</span>
+              </label>
+              <input type="email" required="" id="email" name="email" class="text" placeholder="E-mail" title="E-mail" onfocus="if(this.placeholder==this.title)this.placeholder='';"
+              onblur="if(this.placeholder=='')this.placeholder=this.title;" />
+            </li>
+            <li>
+              <label for="name">Assunto:
+                <span style="color:red;">*</span>
+              </label>
+              <select required="" id="assunto" name="assunto" class="text" />
+              <option style="color:gray;" value="" disabled selected>Selecione sua opção</option>
+              <option value="Ajuda">Ajuda</option>
+              <option value="Contato">Contato</option>
+              <option value="Sugestao">Sugestão</option>
+              <option value="Reclamacao">Reclamação</option>
+              <option value="Outro">Outro</option>
+              </select>
+              <!-- Fim select -->
+            </li>
+            <li>
+              <label for="message">Mensagem:
+                <span style="color:red;">*</span>
+              </label>
+              <textarea id="message" name="message" rows="8" cols="50"></textarea>
+            </li>
+            <li>
+              <input type="submit" value="Enviar" />
+            </li>
+          </ol>
+        </form>
+        <div class="clr"></div>
+      </div>
+    </div>
+    <div class="sidebar">
+      <div class="gadget">
+        <h2 class="star">
+          <span>Site</span>
+        </h2>
+        <div class="clr"></div>
+        <ul class="sb_menu">
+          <li>
+            <a href="{{ url_for('index')}}">Home</a>
+          </li>
+          <li>
+            <a href="{{ url_for('pesquisa')}}">Pesquisa</a>
+          </li>
+          <li>
+            <a href="{{ url_for('artigos')}}">Artigos</a>
+          </li>
+          <li>
+            <a href="{{ url_for('equipe')}}">Equipe</a>
+          </li>
+          <li>
+            <a href="{{ url_for('fale_conosco')}}">Fale Conosco</a>
+          </li>
+        </ul>
+      </div>
+      <div class="gadget">
+        <h2 class="star">
+          <span>Documentação</span>
+        </h2>
+        <div class="clr"></div>
+        <ul class="ex_menu">
+          <li>
+            <a href="{{ url_for('sobre')}}">Sobre Nós</a>
+            <br />
+          </li>
+          <li>
+            <a href="{{ url_for('citacao')}}">Citação</a>
+            <br/>
+          </li>
+          <li>
+            <a href="{{ url_for('ajuda')}}">Ajuda</a>
+            <br/>
+          </li>
+          <img class="logo_labio" src="../static/images/logo_pucrs.jpg"></img>
+        </ul>
+      </div>
+    </div>
+    <div class="clr"></div>
+  </div>
+</div>
+<div class="clr"></div>
+<div class="clr"></div>
+{% endblock %}

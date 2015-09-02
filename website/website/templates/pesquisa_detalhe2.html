@@ -1,0 +1,102 @@
+{% set active_page = "pesquisa" %}
+{% extends "template.html" %}
+{% block content %}
+  <div class="clr"></div>
+  <div class="clr"></div>
+  <div class="content" style="background-color: transparent;">
+    <div class="content_resize2" style="background-color: transparent;">
+      <article class="pesquisa">
+          <div id="citacao_primaria">
+              {% for st in strut %}
+                <div class="box-label">Citação Primária</div>  
+                <div class="content_molecula">
+                  <h1 class="nome_citacao">{{st.pdbTitle}}</h1>
+                  <ul class="list" id="tres">
+                    {% for item in originator %}
+                      <li><p class="p_citacao">{{item.authors.replace(';','; ')}}</p></a></li>
+                      <li><span class="nome_citacao">Journal:</span><p class="p_citacao">({{item.publication_year}}) {{item.journal}}</p></li>
+                      <li><span class="nome_citacao">PubMed: </span><p class="p_citacao">{{item.pubmed_id}}</p></li>
+                      <li><span class="nome_citacao">PubMed Abstract:</span><p class="p_citacao">({{item.publication_year}}) {{item.journal}}</p></li>
+                      <li><span class="nome_citacao">PubMed Abstract:</span></li>
+                      <li><p class="p_citacao">{{item.content}}</p></li>
+                    {% endfor %}
+                  </ul>
+                <div id="content_img">
+                  <div class="box-label" id="img">Estrutura</div>  
+                  <div class="content_molecula"><img id="molecula_citacao" src="http://www.rcsb.org/pdb/images/{{st.pdbID}}_asr_r_500.jpg">
+                    <div class="opcoes_molecula">
+                      <a href="#" class="opcoes_molecula"><img class="icon1" src="../static/images/3d_modelling.jpg">Visualizar em 3D</a><a class="opcoes_molecula" href="#abrirModal"><img class="icon1"  src="../static/images/search.jpg">Aumentar</a>
+                    </div>
+                  </div>
+                </div>
+                </div>
+              {% endfor %}
+            </div>
+      </article>
+      {% for st in strut %}
+      <div id="abrirModal" class="modalDialog">
+        <div><a class="close" title="Fechar" href="#close">X</a>
+          <fieldset id="modal_login"><img id="molecula_maior" src="http://www.rcsb.org/pdb/images/{{st.pdbID}}_asr_r_500.jpg"> </fieldset><!--Fim do fieldset login-->
+        </div><!--Fim div close-->
+      </div><!--Fim div abrir modal-->
+      {% endfor %}
+
+      <article class="pesquisa2">
+        <div id="Tabela_de_informacoes">
+          <div class="box-label" id="dois">Tabela de Informações</div>  
+          <div class="content_molecula">
+<h2 style="margin-left:10px;">Related Articles</h2>
+<table class="artigos">
+<thead> 
+    <tr> 
+      <th id="coluna1"> Rank </th> 
+      <th id="coluna2"> ID </th>
+        <th id="coluna3"> Nome do artigo</th> 
+        <th id="coluna4"> Autores </th>
+        <th id="coluna6"> Data de submissão </th> 
+        <th id="coluna7"> Visualizar </th> 
+    </tr> 
+</thead> 
+<tbody>
+    {% for item in articles %}
+    <tr > 
+         <td class="linha{{ loop.cycle('1', '2') }}">{{item.rank}}</td>
+         <td class="linha{{ loop.cycle('1', '2') }}">{{item.pubmed_id}}</td>
+         <td class="linha{{ loop.cycle('1', '2') }}">{% print item.title %}</td> 
+         <td class="linha{{ loop.cycle('1', '2') }}">{{item.authors.replace(';','<br>')|safe}}</td> 
+         <td class="linha{{ loop.cycle('1', '2') }}">{{item.publication_date|datetime}}</td> 
+         <td class="linha{{ loop.cycle('1', '2') }}"><a href="{{item.pubmed_url}}" target="_blank"><img src="../static/images/file_pdf.png"></a></li></td> 
+    </tr>
+    {% endfor %}
+</tbody>
+</table>
+
+<h2 style="margin-left:10px;">Gene Ontology Terms</h2>
+<table class="artigos">
+<thead> 
+    <tr> 
+      <th id="coluna1"> Ontology </th> 
+      <th id="coluna2"> Term ID </th>
+      <th id="coluna2"> Term </th>
+        <th id="coluna3"> Definition</th> 
+    </tr> 
+</thead> 
+<tbody>
+    {% for item in goterms %}
+    <tr > 
+         <td class="linha{{ loop.cycle('1', '2') }}">{{item.ont}}</td>
+         <td class="linha{{ loop.cycle('1', '2') }}">{{item.term_id}}</td>
+         <td class="linha{{ loop.cycle('1', '2') }}">{{item.term}}</td>
+         <td class="linha{{ loop.cycle('1', '2') }}">{{item.definition|safe}}</td> 
+    </tr>
+    {% endfor %}
+</tbody>
+</table>
+          </div>
+      </article>
+    </div>
+  </div>
+  <div class="clr"></div>
+  <div class="clr"></div>
+
+{% endblock %}

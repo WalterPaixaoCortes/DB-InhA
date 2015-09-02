@@ -1,0 +1,79 @@
+{% set active_page = "artigos" %}
+{% extends "template.html" %}
+{% block content %}
+<div class="clr"></div>
+<div class="clr"></div>
+<div class="content">
+  <div class="mainbar">
+  <div class="content_resize">
+    <h2 style="text-align:left;">Artigos - Palavras utilizadas na classificação</h2>
+    <table class="artigos" style="width: 400px;margin-left:200px;">
+      <thead> 
+        <tr> 
+          <th id="coluna1">Classif.</th> 
+          <th id="coluna1">Palavra</th>
+          <th id="coluna2">Peso</th> 
+        </tr> 
+      </thead> 
+      <tbody>
+        {% for item in words %}
+          <tr> 
+            <td class="linha{{ loop.cycle('1', '2') }}" style="height:0px;padding:0px;text-align:center;">{{item.rank}}</td>
+            <td class="linha{{ loop.cycle('1', '2') }}" style="height:0px;padding:0px;">&nbsp;{{item.word}}</td>
+            <td class="linha{{ loop.cycle('1', '2') }}" style="height:0px;padding:0px;text-align:center;">{% print item.weigth %}</td> 
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+    <div class="sidebar">
+      <div class="gadget">
+        <h2 class="star">
+          <span>Site</span>
+        </h2>
+        <div class="clr"></div>
+        <ul class="sb_menu">
+          <li>
+            <a href="{{ url_for('index')}}">Home</a>
+          </li>
+          <li>
+            <a href="{{ url_for('pesquisa')}}">Pesquisa</a>
+          </li>
+          <li>
+            <a href="{{ url_for('artigos')}}">Artigos</a>
+          </li>
+          <li>
+            <a href="{{ url_for('equipe')}}">Equipe</a>
+          </li>
+          <li>
+            <a href="{{ url_for('fale_conosco')}}">Fale Conosco</a>
+          </li>
+        </ul>
+      </div>
+      <div class="gadget">
+        <h2 class="star">
+          <span>Documentação</span>
+        </h2>
+        <div class="clr"></div>
+        <ul class="ex_menu">
+          <li>
+            <a href="{{ url_for('sobre')}}">Sobre Nós</a>
+            <br />
+          </li>
+          <li>
+            <a href="{{ url_for('citacao')}}">Citação</a>
+            <br/>
+          </li>
+          <li>
+            <a href="{{ url_for('ajuda')}}">Ajuda</a>
+            <br/>
+          </li>
+          <img class="logo_labio" src="../static/images/logo_pucrs.jpg"></img>
+        </ul>
+      </div>
+    </div>
+</div>
+<div class="clr"></div>
+<div class="clr"></div>
+{% endblock %}
