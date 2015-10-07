@@ -1,0 +1,41 @@
+{% set active_page = "artigos" %}
+{% extends "template.html" %}
+{% block content %}
+<div class="clr"></div>
+<div class="clr"></div>
+<div class="content">
+  <div class="content_resize2">
+    <h2 style="text-align:center;">Artigos</h2>
+    <div id="content_struct2">
+      <p>Esta é uma lista de todos os artigos relacionados com a enzima InhA. Estes artigos foram pesquisados no PubMed e foram classificados contra os artigos originais de cada estrutura encontrada. O algoritmo de classificação utilizado é o MedLine Ranker.</P>
+      <p>O algoritmo também lista a relação de palavras que foram utilizadas para classificação e seu peso no processo de classificação. Você pode ver a lista <a href='/palavras'>aqui</a>.
+    </div>
+    <table class="artigos">
+      <thead> 
+        <tr> 
+          <th id="coluna1"> Rank </th> 
+          <th id="coluna2"> ID </th>
+          <th id="coluna3"> Nome do artigo</th> 
+          <th id="coluna4"> Autores </th>
+          <th id="coluna6"> Data de Publicação </th> 
+          <th id="coluna7"> Visualizar </th> 
+        </tr> 
+      </thead> 
+      <tbody>
+        {% for item in struts %}
+          <tr> 
+            <td class="linha{{ loop.cycle('1', '2') }}">{{item.rank}}</td>
+            <td class="linha{{ loop.cycle('1', '2') }}">{{item.pubmed_id}}</td>
+            <td class="linha{{ loop.cycle('1', '2') }}">{% print item.title %}</td> 
+            <td class="linha{{ loop.cycle('1', '2') }}">{{item.authors.replace(';','<br>')|safe}}</td> 
+            <td class="linha{{ loop.cycle('1', '2') }}">{{item.publication_date|datetime}}</td> 
+            <td class="linha{{ loop.cycle('1', '2') }}"><a href="{{item.pubmed_url}}" target="_blank"><img src="../static/images/file_pdf.png"></a></li></td> 
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+<div class="clr"></div>
+<div class="clr"></div>
+{% endblock %}

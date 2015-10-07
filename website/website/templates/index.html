@@ -1,0 +1,93 @@
+{% set active_page = "index" %}
+{% extends "template.html" %}
+{% block content %}
+<!--========================== INDEX ===============================-->
+<div class="clr"></div>
+<div class="slider">
+  <div id="coin-slider">
+    {% for item in structures %}
+      <a href="#"><img src="http://www.rcsb.org/pdb/images/{{item.pdbID}}_asr_r_500.jpg" width="960" height="360" alt="" /><span><big>{{item.pdbID}}</big><br />
+      {{item.pdbTitle}}. Protein chains are colored from the N-terminal to the C-terminal using a rainbow (spectral) color gradient</span></a>
+    {% endfor %}
+  </div>
+  <div class="clr"></div>
+</div>
+<div class="clr"></div>
+<div class="clr"></div>
+<div class="content">
+  <div class="content_resize">
+    <div class="mainbar">
+      <div class="article">
+        <h2><span>Seja bem vindo!</span></h2>
+        <div class="clr"></div>
+        <div class="clr"></div>
+      </div>
+      <div class="article">
+        <div class="clr"></div>
+        <div class="content_principal" style="text-align:justify;">
+          <p style="text-indent:10px;">O DB-InhA é um banco de dados de bioinformática do tipo terciário, que disponibiliza, através deste portal de internet, informações coletadas de diversas outras fontes – tais como bancos de dados primários e secundários – a respeito da enzima InhA relacionada ao organismo <i>Mycobacterium tuberculosis</i>. A informação passa por processos de análise, de-duplicação e composição, para que sejam inter-relacionadas. A vantagem deste processo é possibilitar ao pesquisador encontrar em apenas um local toda a informação desejada.</p>
+          <p style="text-indent:10px;">A criação do DB-InhA surgiu da necessidade de facilitar para pesquisadores de novos fármacos no tratamento da tuberculose a procura de informação a respeito da enzima InhA, no intuito de que novas descobertas possam alcançar a população afetada mais rapidamente.</p>
+          <p style="text-indent:10px;">A tuberculose é uma doença que ainda representa um grande risco a saúde pública e carece de tratamentos mais efetivos e imediatos. Devido ao tratamento padrão levar cerca de 6 meses para ser concluído com sucesso, a bactéria <i>Mycobacterium tuberculosis</i> já desenvolveu uma geração que é resistente aos medicamentos de primeira linha de combate (isoniazida e rifampicina), o que nos leva a pacientes que precisam recorrer a tratamentos com medicamentos de segunda linha, que ainda são poucos e de disponibilidade diminuída (World Health Organization, 2015). Nesta dimensão, a motivação é ser um facilitador para pesquisadores desta área, no intuito de que novas descobertas possam alcançar a população afetada mais rapidamente.</p>
+        </div>
+        <div class="clr"></div>
+      </div>
+    </div>
+    <div class="sidebar">
+      <div class="searchform">
+        <form id="formsearch" name="formsearch" method="post" action="#">
+          <span>
+            <input name="editbox_search" class="editbox_search" id="editbox_search" maxlength="80" value="Busca no site:" type="text" />
+          </span>
+          <input name="button_search" src="../static/images/search.gif" class="button_search" type="image" />
+        </form>
+      </div>
+      <div class="gadget">
+        <h2 class="star">
+          <span>Site</span>
+        </h2>
+        <div class="clr"></div>
+        <ul class="sb_menu">
+          <li>
+            <a href="{{ url_for('index')}}">Home</a>
+          </li>
+          <li>
+            <a href="{{ url_for('pesquisa')}}">Pesquisa</a>
+          </li>
+          <li>
+            <a href="{{ url_for('artigos')}}">Artigos</a>
+          </li>
+          <li>
+            <a href="{{ url_for('equipe')}}">Equipe</a>
+          </li>
+          <li>
+            <a href="{{ url_for('fale_conosco')}}">Fale Conosco</a>
+          </li>
+        </ul>
+      </div>
+      <div class="gadget">
+        <h2 class="star">
+          <span>Documentação</span>
+        </h2>
+        <div class="clr"></div>
+        <ul class="ex_menu">
+          <li>
+            <a href="{{ url_for('sobre')}}">Sobre Nós</a>
+            <br />
+          </li>
+          <li>
+            <a href="{{ url_for('citacao')}}">Citação</a>
+            <br/>
+          </li>
+          <li>
+            <a href="{{ url_for('ajuda')}}">Ajuda</a>
+            <br/>
+          </li>
+          <img class="logo_labio" src="../static/images/logo_pucrs.jpg"></img>
+        </ul>
+      </div>
+      </div>
+      <div class="clr"></div>
+    </div>
+  </div>
+{% endblock %}
+        

@@ -1,0 +1,52 @@
+{% set active_page = "pesquisa" %}
+{% extends "template.html" %}
+{% block content %}
+<div class="clr"></div>
+<div class="clr"></div>
+<div class="content">
+  <div class="content_resize2">
+    <h2 style="text-align:center;">Pesquisar</h2>
+    <fieldset style="margin-left: 15%;">
+        <form id="formsearch" name="formsearch" method="post" action="#">
+          <span style="background: transparent;margin-top:3px;">Pesquisar por:&nbsp;</span>
+          <span>
+            <select name="select_search" id="select_search" class="editbox_search">
+              <option selected value="1">Todos</option>
+              <option value="2">Estrutura</option>
+              <option value="3">Título</option>
+              <option value="4">Autores</option>
+            </select>
+            </span>
+          <span>
+            <input name="editbox_search" class="editbox_search" id="editbox_search" maxlength="120" value="Digite a estrutura, pedaço do título ou do nome de um dos autores..." type="text" />
+          </span>
+          <input name="button_search" src="../static/images/search.gif" class="button_search" type="image" />
+        </form>    
+    </fieldset>
+    <table class="artigos">
+      <thead> 
+          <tr> 
+            <th id="coluna1"> Estrutura </th> 
+            <th id="coluna3"> Título </th>
+            <th id="coluna2"> Autores</th> 
+            <th id="coluna2"> Data de Submissão </th> 
+            <th id="coluna1"> Link </th> 
+          </tr> 
+      </thead> 
+      <tbody>
+          {% for item in struts %}
+          <tr > 
+               <td class="linha{{ loop.cycle('1', '2') }}"><a href="/pesquisa/{{item.pdbID}}">{{item.pdbID}}</a></td>
+               <td class="linha{{ loop.cycle('1', '2') }}">{{item.pdbTitle|title}}</td> 
+               <td class="linha{{ loop.cycle('1', '2') }}">{{item.pdbAuthors|replace(',','<br>')|safe}}</td> 
+               <td class="linha{{ loop.cycle('1', '2') }}">{{item.pdbDepositionDate|datetime}}</td> 
+               <td class="linha{{ loop.cycle('1', '2') }}"><a href="http://www.rcsb.org/pdb/download/downloadFile.do?fileFormat=pdb&compression=NO&structureId={{item.pdbID}}"><img src="../static/images/file_pdf.png"></a></li></td> 
+          </tr>
+          {% endfor %}
+      </tbody>
+    </table>
+    <div class="clr"></div>
+    <div class="clr"></div>
+  </div>
+</div>
+{% endblock %}

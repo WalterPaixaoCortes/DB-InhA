@@ -1,0 +1,111 @@
+{% set active_page = "pesquisa" %}
+{% extends "template.html" %}
+{% block content %}
+<div class="clr"></div>
+<div class="clr"></div>
+<div class="content">
+  <div class="content_resize2">
+    <h2 style="text-align:center;">Pesquisar - Visualização</h2>
+    {% for st in strut %}
+      <div id="content_struct">
+        <div id="left_struct">
+          <p><b>{{st.pdbID}}</b> - {{st.pdbTitle}}</p>
+          <p><b>Version:</b> {{st.pdbVersion}} - <b>Deposition Date:</b> {{st.pdbDate}}</p>
+          <p><b>Classification:</b> {{st.pdbClassification}}</p>
+          <p><b>Experiment:</b> {{st.pdbMethod}} - <b>Resolution:</b> {{st.pdbResolution}} angstrons</p>
+          <p><a href='http://www.rcsb.org/pdb/images/{{st.pdbID}}_ram_m_500.pdf' target='_blank'>Ramachandram plot</a> by MolProbity. </p>
+          <h3>Ligantes</h3>
+          {% for lig in ligands %}
+            <p>{{lig['chemical_id']}} - {{lig['chemical_name']}}<br><b>Type:</b> {{lig['type']}} - <b>Formula:</b> {{lig['formula']}}<br><b>Molecular Weight:</b> {{lig['molecular_weight']}}</p>
+          {% endfor %}
+        </div>
+        <div id="right_struct">
+          <div id="content_img">
+            <div class="box-label" id="img">Estrutura</div>  
+            <div class="content_molecula"><img id="molecula_citacao" src="http://www.rcsb.org/pdb/images/{{st.pdbID}}_asr_r_500.jpg">
+              <div class="opcoes_molecula">
+                <a href="#" class="opcoes_molecula"><img class="icon1" src="../static/images/3d_modelling.jpg">Visualizar em 3D</a><a class="opcoes_molecula" href="#abrirModal"><img class="icon1"  src="../static/images/search.jpg">Aumentar</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+    <br><br>
+    <h2 style="margin-left:10px;">Artigo Principal</h2>
+    <table class="artigos">
+      <thead> 
+        <tr> 
+          <th id="coluna2"> ID </th>
+          <th id="coluna3"> Nome do artigo</th> 
+          <th id="coluna4"> Autores </th>
+          <th id="coluna6"> Data de Publicação </th> 
+          <th id="coluna7"> Visualizar </th> 
+        </tr> 
+      </thead> 
+      <tbody>
+        {% for item in originator %}
+          <tr > 
+            <td class="linha{{ loop.cycle('1', '2') }}">{{item.pubmed_id}}</td>
+            <td class="linha{{ loop.cycle('1', '2') }}">{% print item.title %}</td> 
+            <td class="linha{{ loop.cycle('1', '2') }}">{{item.authors.replace(';','<br>')|safe}}</td> 
+            <td class="linha{{ loop.cycle('1', '2') }}">{{item.publication_date|datetime}}</td> 
+            <td class="linha{{ loop.cycle('1', '2') }}"><a href="{{item.pubmed_url}}" target="_blank"><img src="../static/images/file_pdf.png"></a></li></td> 
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <br><br>
+    <h2 style="margin-left:10px;">Artigos Relacionados</h2>
+    <table class="artigos">
+      <thead> 
+        <tr> 
+          <th id="coluna1"> Rank </th> 
+          <th id="coluna2"> ID </th>
+          <th id="coluna3"> Nome do artigo</th> 
+          <th id="coluna4"> Autores </th>
+          <th id="coluna6"> Data de submissão </th> 
+          <th id="coluna7"> Visualizar </th> 
+        </tr> 
+      </thead> 
+      <tbody>
+        {% for item in articles %}
+          <tr > 
+            <td class="linha{{ loop.cycle('1', '2') }}">{{item.rank}}</td>
+            <td class="linha{{ loop.cycle('1', '2') }}">{{item.pubmed_id}}</td>
+            <td class="linha{{ loop.cycle('1', '2') }}">{% print item.title %}</td> 
+            <td class="linha{{ loop.cycle('1', '2') }}">{{item.authors.replace(';','<br>')|safe}}</td> 
+            <td class="linha{{ loop.cycle('1', '2') }}">{{item.publication_date|datetime}}</td> 
+            <td class="linha{{ loop.cycle('1', '2') }}"><a href="{{item.pubmed_url}}" target="_blank"><img src="../static/images/file_pdf.png"></a></li></td> 
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <br><br>
+    <h2 style="margin-left:10px;">Gene Ontology Terms</h2>
+    <table class="artigos">
+      <thead> 
+        <tr> 
+          <th id="coluna1"> Ontology </th> 
+          <th id="coluna2"> Term ID </th>
+          <th id="coluna2"> Term </th>
+          <th id="coluna3"> Definition</th> 
+        </tr> 
+      </thead> 
+      <tbody>
+        {% for item in goterms %}
+          <tr > 
+            <td class="linha{{ loop.cycle('1', '2') }}">{{item.ont}}</td>
+            <td class="linha{{ loop.cycle('1', '2') }}">{{item.term_id}}</td>
+            <td class="linha{{ loop.cycle('1', '2') }}">{{item.term}}</td>
+            <td class="linha{{ loop.cycle('1', '2') }}">{{item.definition|safe}}</td> 
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <div class="transparent"></div>
+  </div>
+</div>
+<div class="clr"></div>
+<div class="clr"></div>
+{% endblock %}
