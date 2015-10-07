@@ -56,7 +56,7 @@ def save_structures(cfg,log,db,listItem):
 def build_training_set(cfg,log,db,pm):
     try:
         listAdded = []
-
+            
         if cfg.FullReload:
             db.executeCommand(cfg.sqlTruncateTrainingSet)
 
