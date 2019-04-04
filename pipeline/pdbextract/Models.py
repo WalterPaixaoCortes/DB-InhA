@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import sys
 from prody import *
+import traceback
 
 __name__ = "Models"
 
@@ -113,113 +114,118 @@ class PdbInfo(Serializer):
         return (self.status == "Created")
 
     def importData(self, atoms, header):
-        if self.isCreated():
-            self.identifier = header["identifier"]
-            self.version = header["version"]
-            self.classification = header["classification"]
-            self.deposition_date = header["deposition_date"]
-            self.title = header["title"]
-            self.resolution = header["resolution"]
-            self.experiment = header["experiment"]
-            self.space_group = header["space_group"]
-            
-            if header["authors"]:
-                self.authors.extend(header["authors"])
+        #self.status = 'Not Imported'
+        try:
+            if self.isCreated() and 'identifier' in header:
+                self.identifier = header["identifier"]
+                self.version = header["version"]
+                self.classification = header["classification"]
+                self.deposition_date = header["deposition_date"]
+                self.title = header["title"]
+                self.resolution = header["resolution"]
+                self.experiment = header["experiment"]
+                self.space_group = header["space_group"]
                 
-            self.journal.publisher = header["reference"]["publisher"]
-            self.journal.reference = header["reference"]["reference"]
-            self.journal.title = header["reference"]["title"]
-            
-            if header["reference"]["editors"]:
-                self.journal.editors.extend(header["reference"]["editors"])
-            
-            if header["reference"]["authors"]:
-                self.journal.authors.extend(header["reference"]["authors"])
-            
-            if 'issn' in header["reference"]:
-                self.journal.issn = header["reference"]["issn"]
+                if header["authors"]:
+                    self.authors.extend(header["authors"])
+                    
+                self.journal.publisher = header["reference"]["publisher"]
+                self.journal.reference = header["reference"]["reference"]
+                self.journal.title = header["reference"]["title"]
+                
+                if header["reference"]["editors"]:
+                    self.journal.editors.extend(header["reference"]["editors"])
+                
+                if header["reference"]["authors"]:
+                    self.journal.authors.extend(header["reference"]["authors"])
+                
+                if 'issn' in header["reference"]:
+                    self.journal.issn = header["reference"]["issn"]
 
-            if "pmid" in header["reference"]:
-                self.journal.pmid = header["reference"]["pmid"]
-            
-            if header["chemicals"]:
-                for chem_item in header["chemicals"]:
-                    item = PdbChemical()
-                    item.residueName = chem_item.resname
-                    item.residueNumber = chem_item.resnum
-                    item.name = chem_item.name
-                    item.chain = chem_item.chain
-                    item.insertionCode = chem_item.icode
-                    item.numberOfAtoms = chem_item.natoms
-                    item.description = chem_item.description
-                    
-                    if chem_item.synonyms:
-                        item.synonyms.extend(chem_item.synonyms)
-    
-                    item.formula = chem_item.formula
-                    item.pdbentry = chem_item.pdbentry
-                    self.chemicals.append(item)
+                if "pmid" in header["reference"]:
+                    self.journal.pmid = header["reference"]["pmid"]
                 
-            if header["polymers"]:
-                for pol_item in header["polymers"]:
-                    itemC = Compound()
-                    itemC.chid = pol_item.chid
-                    itemC.fragment = pol_item.fragment
-                    itemC.name = pol_item.name
-                    itemC.pdbentry = pol_item.pdbentry
-                    itemC.seqres = pol_item.sequence
-                    
-                    if pol_item.synonyms:
-                        itemC.synonyms.extend(pol_item.synonyms)
+                if header["chemicals"]:
+                    for chem_item in header["chemicals"]:
+                        item = PdbChemical()
+                        item.residueName = chem_item.resname
+                        item.residueNumber = chem_item.resnum
+                        item.name = chem_item.name
+                        item.chain = chem_item.chain
+                        item.insertionCode = chem_item.icode
+                        item.numberOfAtoms = chem_item.natoms
+                        item.description = chem_item.description
                         
-                    if pol_item.modified:
-                        itemC.seqmod.extend(pol_item.modified)
+                        if chem_item.synonyms:
+                            item.synonyms.extend(chem_item.synonyms)
+        
+                        item.formula = chem_item.formula
+                        item.pdbentry = chem_item.pdbentry
+                        self.chemicals.append(item)
                     
-                    itemC.engineered = pol_item.engineered
-                    itemC.mutation = pol_item.mutation
-                    
-                    if pol_item.ec:
-                        itemC.ec.extend(pol_item.ec)
+                if header["polymers"]:
+                    for pol_item in header["polymers"]:
+                        itemC = Compound()
+                        itemC.chid = pol_item.chid
+                        itemC.fragment = pol_item.fragment
+                        itemC.name = pol_item.name
+                        itemC.pdbentry = pol_item.pdbentry
+                        itemC.seqres = pol_item.sequence
                         
-                    if pol_item.dbrefs:
-                        for db_item in pol_item.dbrefs:
-                            itemD = DbRef()
-                            itemD.accession = db_item.accession
-                            itemD.database = db_item.database
-                            itemD.dbabbr = db_item.dbabbr
-                            itemD.idcode = db_item.idcode
-                            itemD.first = db_item.first
-                            itemD.last = db_item.last
+                        if pol_item.synonyms:
+                            itemC.synonyms.extend(pol_item.synonyms)
                             
-                            if db_item.diff:
-                                itemD.diff.extend(db_item.diff)
+                        if pol_item.modified:
+                            itemC.seqmod.extend(pol_item.modified)
+                        
+                        itemC.engineered = pol_item.engineered
+                        itemC.mutation = pol_item.mutation
+                        
+                        if pol_item.ec:
+                            itemC.ec.extend(pol_item.ec)
+                            
+                        if pol_item.dbrefs:
+                            for db_item in pol_item.dbrefs:
+                                itemD = DbRef()
+                                itemD.accession = db_item.accession
+                                itemD.database = db_item.database
+                                itemD.dbabbr = db_item.dbabbr
+                                itemD.idcode = db_item.idcode
+                                itemD.first = db_item.first
+                                itemD.last = db_item.last
                                 
-                            itemC.dbrefs.append(itemD)
-                            
-                    self.compounds.append(itemC)
-                    
-            if atoms:
-                for itemA in iter(atoms):
-                    at = PdbAtom()
-                    at.acsindex = itemA.getACSIndex()
-                    at.serial = itemA.getSerial()
-                    at.name = itemA.getName()
-                    at.altloc = itemA.getAltloc()
-                    at.resname = itemA.getResname()
-                    at.chid = itemA.getChid()
-                    at.resnum = itemA.getResnum()
-                    at.icode = itemA.getIcode()
-                    at.coords = itemA.getCoords()
-                    at.occupancy = itemA.getOccupancy()
-                    at.beta = itemA.getBeta()
-                    at.element = itemA.getElement()
-                    at.charge = itemA.getCharge()
-                    
-                    if at.resname in ('NAD','HOH'):
-                        at.rectype = 'HETATM'
-                    else:
-                        at.rectype = 'ATOM'
+                                if db_item.diff:
+                                    itemD.diff.extend(db_item.diff)
+                                    
+                                itemC.dbrefs.append(itemD)
+                                
+                        self.compounds.append(itemC)
                         
-                    self.atomcoords.append(at)
-                
-            self.status = "Imported"
+                if atoms:
+                    for itemA in iter(atoms):
+                        at = PdbAtom()
+                        at.acsindex = itemA.getACSIndex()
+                        at.serial = itemA.getSerial()
+                        at.name = itemA.getName()
+                        at.altloc = itemA.getAltloc()
+                        at.resname = itemA.getResname()
+                        at.chid = itemA.getChid()
+                        at.resnum = itemA.getResnum()
+                        at.icode = itemA.getIcode()
+                        at.coords = itemA.getCoords()
+                        at.occupancy = itemA.getOccupancy()
+                        at.beta = itemA.getBeta()
+                        at.element = itemA.getElement()
+                        at.charge = itemA.getCharge()
+                        
+                        if at.resname in ('NAD','HOH'):
+                            at.rectype = 'HETATM'
+                        else:
+                            at.rectype = 'ATOM'
+                            
+                        self.atomcoords.append(at)
+                    
+                self.status = "Imported"
+        except:
+            self.status = 'Not Imported'
+            print(traceback.format_exc())

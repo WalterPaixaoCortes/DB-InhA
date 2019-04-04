@@ -4,7 +4,6 @@ import traceback
 import datetime
 import time
 import os
-import suds
 import logging
 import MySQLdb
 
@@ -19,7 +18,10 @@ from bs4 import *
 from components import PDB
 from components.PubMed import *
 
+from suds.client import Client
+
 #----------------------------------------------------------------------------------------------------------------------#
+
 
 def retrieve_structures(cfg,log):
     final_list = None
@@ -46,9 +48,22 @@ def save_structures(cfg,log,db,listItem):
             log.info('Saving Candidate: %s...' % item)
             if PDB.get_file(cfg,log,item):
                 pdb = PDB.parse_header(cfg,item)
-                db.executeCommand(cfg.sqlInsertCandidate,(item, MySQLdb.escape_string(PDB.get_content()), MySQLdb.escape_string(pdb['name']), MySQLdb.escape_string(pdb['author']), pdb['deposition_date'], pdb['release_date'], pdb['version'], pdb['resolution'], pdb['head'], pdb['structure_method'], pdb['compound']['1']['chain'], pdb['compound']['1']['ec_number'], pdb['source']['1']['organism_taxid'],pdb['source']['1']['organism_scientific'],pdb['source']['1']['expression_system_taxid'],pdb['source']['1']['expression_system']))
+                db.executeCommand(cfg.sqlInsertCandidate,(item, MySQLdb.escape_string(PDB.get_content()), 
+                                                                MySQLdb.escape_string(pdb['name']), 
+                                                                MySQLdb.escape_string(pdb['author']), 
+                                                                pdb['deposition_date'], 
+                                                                pdb['release_date'], '0', 
+                                                                pdb['resolution'], 
+                                                                pdb['head'], 
+                                                                pdb['structure_method'], 
+                                                                pdb['compound']['1']['chain'] if 'chain' in pdb['compound']['1'] else '' , 
+                                                                pdb['compound']['1']['ec_number'] if 'ec_number' in pdb['compound']['1'] else '', 
+                                                                pdb['source']['1']['organism_taxid'] if 'organism_taxid' in pdb['source']['1'] else '',
+                                                                pdb['source']['1']['organism_scientific'] if 'organism_scientific' in pdb['source']['1'] else '',
+                                                                pdb['source']['1']['expression_system_taxid'] if 'expression_system_taxid' in pdb['source']['1'] else '',
+                                                                pdb['source']['1']['expression_system'] if 'expression_system' in pdb['source']['1'] else ''))
 
-        db.commit()
+                db.commit()
     except:
         log.error(traceback.format_exc())
         db.rollback()
@@ -56,11 +71,7 @@ def save_structures(cfg,log,db,listItem):
 def build_training_set(cfg,log,db,pm):
     try:
         listAdded = []
-<<<<<<< HEAD
-
-=======
             
->>>>>>> origin/master
         if cfg.FullReload:
             db.executeCommand(cfg.sqlTruncateTrainingSet)
 
@@ -68,9 +79,9 @@ def build_training_set(cfg,log,db,pm):
         candidates = db.getData(cfg.sqlSelectCandidates).fetchall()
 
         for addFile in candidates:
-            key = addFile['pdbID']
+            key = addFile[0]
             f = PDB.parse_prody(cfg,key)
-            if (f.journal.pmid not in listAdded) and f.journal.pmid != "":
+            if f.status == 'Imported' and (f.journal.pmid not in listAdded) and f.journal.pmid != "":
                 article = pm.get_pubmed_article(f.journal.pmid)
                 pm.save_pubmed_article(f.journal.pmid,article,'Training')
                 listAdded.append(f.journal.pmid)
@@ -87,16 +98,17 @@ def search_literature(cfg,log,db,pm):
             db.executeCommand(cfg.sqlTruncateLiterature)
         
         result = pm.search_pubmed()
-
+        
         if result:
             log.info('Number of entries: %s...' % result['Count'])
             for item in result['IdList']:
                 try:
                     resCount = db.getData(cfg.sqlCountLiterature % (item))
                     row = resCount.fetchall()
-                    if row[0]['cnt'] == 0:
+                    if row[0][0] == 0:
                         article = pm.get_pubmed_article(item)
-                        pm.save_pubmed_article(item, article, 'Literature')
+                        if not pm.save_pubmed_article(item, article, 'Literature'):
+                            print(article)
                     resCount.close()
                 except:
                     log.error(traceback.format_exc())
@@ -114,20 +126,20 @@ def rank_literature(cfg,log,db):
         if cfg.FullReload:
             db.executeCommand(cfg.sqlTruncateWords)
         
-        client = suds.client.Client(cfg.MedLineRankURL)
+        client = Client(cfg.MedLineRankURL)
         
         log.info('Preparing Training Set...')
         trainingCursor = db.getData(cfg.sqlSelectTrainingSet).fetchall()
         trainingList = []
         for line in trainingCursor:
-            trainingList.append(line['pubmed_id'])
+            trainingList.append(line[0])
         trainingSet = cfg.pubmedDelimiter.join(trainingList)
 
         log.info('Preparing Articles to Rank...')
         testingCursor = db.getData(cfg.sqlSelectTestingSet).fetchall()
         testingList = []
         for line in testingCursor:
-            testingList.append(line['pubmed_id'])
+            testingList.append(line[0])
         testingSet = cfg.pubmedDelimiter.join(testingList)
 
         log.info('Calling the Web Service...')
@@ -193,14 +205,14 @@ def retrieve_ligands(cfg,log,db):
         structs = db.getData(cfg.sqlSelectCandidates).fetchall()
 
         for strut in structs:
-            json_string = PDB.get_ligands(cfg,strut['pdbID'])
+            json_string = PDB.get_ligands(cfg,strut[0])
             if json_string and json_string['structureId'] and json_string['structureId']['ligandInfo']:
                 if type(json_string['structureId']['ligandInfo']['ligand']) == dict:
                     item = json_string['structureId']['ligandInfo']['ligand']
-                    db.executeCommand(cfg.sqlInsertLigand,(strut['pdbID'], item['@chemicalID'], item['chemicalName'],item['@type'],item['formula'],item['@molecularWeight']))
+                    db.executeCommand(cfg.sqlInsertLigand,(strut[0], item['@chemicalID'], item['chemicalName'],item['@type'],item['formula'],item['@molecularWeight']))
                 else:
                     for item in json_string['structureId']['ligandInfo']['ligand']:
-                        db.executeCommand(cfg.sqlInsertLigand,(strut['pdbID'], item['@chemicalID'], item['chemicalName'],item['@type'],item['formula'],item['@molecularWeight']))
+                        db.executeCommand(cfg.sqlInsertLigand,(strut[0], item['@chemicalID'], item['chemicalName'],item['@type'],item['formula'],item['@molecularWeight']))
 
         db.commit()
     except:
@@ -215,21 +227,21 @@ def retrieve_go_terms(cfg,log,db):
         structs = db.getData(cfg.sqlSelectCandidates).fetchall()
 
         for strut in structs:
-            log.info('Getting GO terms for structure %s' % strut['pdbID'])
-            json_string = PDB.get_go_terms(cfg,strut['pdbID'])
+            log.info('Getting GO terms for structure %s' % strut[0])
+            json_string = PDB.get_go_terms(cfg,strut[0])
             if json_string and json_string['goTerms'] and json_string['goTerms']['term']:
                 if type(json_string['goTerms']['term']) == dict:
                     item = json_string['goTerms']['term']
                     if '@synonyms' in json_string['goTerms']['term']:
-                        db.executeCommand(cfg.sqlInsertGoTerms,(strut['pdbID'], item['@chainId'], item['@id'],item['detail']['@name'],item['detail']['@definition'],item['detail']['@synonyms'],item['detail']['@ontology']))
+                        db.executeCommand(cfg.sqlInsertGoTerms,(strut[0], item['@chainId'], item['@id'],item['detail']['@name'],item['detail']['@definition'],item['detail']['@synonyms'],item['detail']['@ontology']))
                     else:
-                        db.executeCommand(cfg.sqlInsertGoTerms,(strut['pdbID'], item['@chainId'], item['@id'],item['detail']['@name'],item['detail']['@definition'],None,item['detail']['@ontology']))
+                        db.executeCommand(cfg.sqlInsertGoTerms,(strut[0], item['@chainId'], item['@id'],item['detail']['@name'],item['detail']['@definition'],None,item['detail']['@ontology']))
                 else:
                     for item in json_string['goTerms']['term']:
                         if '@synonyms' in json_string['goTerms']['term']:
-                            db.executeCommand(cfg.sqlInsertGoTerms,(strut['pdbID'], item['@chainId'], item['@id'],item['detail']['@name'],item['detail']['@definition'],item['detail']['@synonyms'],item['detail']['@ontology']))
+                            db.executeCommand(cfg.sqlInsertGoTerms,(strut[0], item['@chainId'], item['@id'],item['detail']['@name'],item['detail']['@definition'],item['detail']['@synonyms'],item['detail']['@ontology']))
                         else:
-                            db.executeCommand(cfg.sqlInsertGoTerms,(strut['pdbID'], item['@chainId'], item['@id'],item['detail']['@name'],item['detail']['@definition'],None,item['detail']['@ontology']))
+                            db.executeCommand(cfg.sqlInsertGoTerms,(strut[0], item['@chainId'], item['@id'],item['detail']['@name'],item['detail']['@definition'],None,item['detail']['@ontology']))
 
         db.commit()
     except:
@@ -242,7 +254,7 @@ def retrieve_genbank_info(cfg,log,db):
         for item in structs:
             html = None
             try:
-                html = PDB.get_genbank_info(cfg,log,item['pdbID'])
+                html = PDB.get_genbank_info(cfg,log,item[0])
                 tree = ElementTree.fromstring(html)
                 gb_sequence = tree.findall('.//GBSeq/GBSeq_sequence')[0].text
                 gb_taxonomy = tree.findall('.//GBSeq/GBSeq_taxonomy')[0].text
@@ -253,12 +265,12 @@ def retrieve_genbank_info(cfg,log,db):
                     if 'gi|' in node.text:
                         gb_gi = node.text.replace('gi|','')
 
-                db.executeCommand(cfg.sqlUpdateGenBank,(gb_taxonomy, gb_sequence, gb_seq_length, gb_gi, item['pdbID']))
-                log.info('Updating information with GenBank data for structure  %s.' % item['pdbID'])
+                db.executeCommand(cfg.sqlUpdateGenBank,(gb_taxonomy, gb_sequence, gb_seq_length, gb_gi, item[0]))
+                log.info('Updating information with GenBank data for structure  %s.' % item[0])
             except:
-                log.info('No information found on GenBank for structure  %s.' % item['pdbID'])
-                if html is not None:
-                    raise
+                log.info('No information found on GenBank for structure  %s.' % item[0])
+                #if html is not None:
+                #    raise
             time.sleep(2)
 
         db.commit()
@@ -273,16 +285,16 @@ def retrieve_pathways(cfg,log,db):
         structs = db.getData(cfg.sqlSelectCandidates).fetchall()
         html = None
         for item in structs:
-            log.info('Finding pathway data for structure  %s.' % item['pdbID'])
+            log.info('Finding pathway data for structure  %s.' % item[0])
             html = None
             try:
-                html = PDB.get_pathways_info(item['pdbECnumber'])
+                html = PDB.get_pathways_info(cfg, log, item[1])
                 soup = BeautifulSoup(html)
                 links = soup.findAll('a')
                 for link in  links:
                     if 'href' in link.attrs[0]:
                         if 'show_pathway' in link.attrs[0][1]:
-                            db.executeCommand(cfg.sqlInsertPathway,(item['pdbID'],cfg.keggRootURL + link.attrs[0][1],link.contents[0]))
+                            db.executeCommand(cfg.sqlInsertPathway,(item[0],cfg.keggRootURL + link.attrs[0][1],link.contents[0]))
             except:
                 raise
 
@@ -296,7 +308,7 @@ def Execute(cfgName):
     returnValue = 0
 
     print(datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S'))
-    print("Loading Configuration...")
+    print("Loading Configuration... %s" % cfgName)
 
     fileConfig = labio.configWrapper.load_configuration(cfgName)
 
@@ -325,7 +337,6 @@ def Execute(cfgName):
                         final_list = retrieve_structures(fileConfig,nlogging)
                         if final_list:                      
                             #nlogging.info('Number of structures found: %s' % (len(final_list)))
-                            print(final_list)
                             nlogging.info('Adding Candidates to the database...')
                             save_structures(fileConfig,nlogging,db2,final_list)
                         else:

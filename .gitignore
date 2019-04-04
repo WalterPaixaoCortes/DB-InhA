@@ -2,6 +2,7 @@
 *.pyproj.user
 *.pyproj
 *.log
+*.pyc
 .vs/
 .vscode/
 obj/

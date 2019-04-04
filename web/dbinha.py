@@ -2,13 +2,14 @@
 #----------------------------------------------------------------------------------------------------------------------
 # Imports 
 #----------------------------------------------------------------------------------------------------------------------
-from flask import Flask, render_template, request, ext
+from flask import Flask, render_template, request #, ext
 
 import traceback
 import labio.configWrapper
 import labio.dbWrapper 
 import smtplib
-from flask.ext.babel import format_datetime, Babel
+from flask_babel import Babel
+from babel.dates import format_datetime
 #----------------------------------------------------------------------------------------------------------------------
 # Inicializacao 
 #----------------------------------------------------------------------------------------------------------------------
@@ -128,6 +129,9 @@ def list_structures():
 				cursor.close ()
 				db2.close ()
 				results = row
+				for item in results:
+					item['fld1'] = item['pdbID'][1:3].lower()
+					item['fld2'] = item['pdbID'].lower()
 			else:
 				app.logger.error('Database not opened.')
 		else:
@@ -196,10 +200,15 @@ def search_structures():
 
 			if db2.isDatabaseOpen():
 				cursor = db2.getData(fileConfig.sqlSearchStructures)
-				row = cursor.fetchall ()
-				cursor.close ()
-				db2.close ()
-				results = row
+				row = cursor.fetchall()
+				cursor.close()
+				db2.close()
+				results = []
+				for item in row:
+					record={}
+					for key in item:
+						record[str(key)] = item[key]
+				print(results[0])
 			else:
 				app.logger.error('Database not opened.')
 		else:
@@ -219,11 +228,15 @@ def get_structure(pdbid):
 			db2 = labio.dbWrapper.dbGenericWrapper(fileConfig.database).getDB()
 
 			if db2.isDatabaseOpen():
-				cursor = db2.getData(fileConfig.sqlGetStructure,[pdbid])
+				cursor = db2.getData(fileConfig.sqlGetStructure,pdbid)
 				row = cursor.fetchall ()
 				cursor.close ()
 				db2.close ()
 				results = row
+				for item in results:
+					item['fld1'] = item['pdbID'][1:3].lower()
+					item['fld2'] = item['pdbID'].lower()
+
 			else:
 				app.logger.error('Database not opened.')
 		else:
@@ -244,9 +257,9 @@ def get_related_articles(pdbid,rel_type):
 
 			if db2.isDatabaseOpen():
 				if rel_type == 'Originator':
-					cursor = db2.getData(fileConfig.sqlGetRelatedArticlesOriginator,[pdbid])
+					cursor = db2.getData(fileConfig.sqlGetRelatedArticlesOriginator,pdbid)
 				else:
-					cursor = db2.getData(fileConfig.sqlGetRelatedArticles,[pdbid])
+					cursor = db2.getData(fileConfig.sqlGetRelatedArticles,pdbid)
 				row = cursor.fetchall ()
 				cursor.close ()
 				db2.close ()
@@ -270,7 +283,7 @@ def get_ligands(pdbid):
 			db2 = labio.dbWrapper.dbGenericWrapper(fileConfig.database).getDB()
 
 			if db2.isDatabaseOpen():
-				cursor = db2.getData(fileConfig.sqlGetLigands,[pdbid])
+				cursor = db2.getData(fileConfig.sqlGetLigands,pdbid)
 				row = cursor.fetchall ()
 				cursor.close ()
 				db2.close ()
@@ -294,7 +307,7 @@ def get_go_terms(pdbid):
 			db2 = labio.dbWrapper.dbGenericWrapper(fileConfig.database).getDB()
 
 			if db2.isDatabaseOpen():
-				cursor = db2.getData(fileConfig.sqlGetGoTerms,[pdbid])
+				cursor = db2.getData(fileConfig.sqlGetGoTerms,pdbid)
 				row = cursor.fetchall ()
 				cursor.close ()
 				db2.close ()

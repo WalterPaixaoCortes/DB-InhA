@@ -3,10 +3,11 @@ import traceback
 import datetime
 import time
 import os
-import urllib.request as urllib2
+import urllib as urllib2
 import json
 import xml2json
 import optparse
+import requests
 
 from Bio.PDB import *
 from pdbextract.Models import *
@@ -17,18 +18,21 @@ __html = ''
 def execute_advanced_query(log, searchUrl, searchQuery):
     result = None
     try:
-        req = urllib2.Request(searchUrl,data=searchQuery.encode('utf-8'))
-        f = urllib2.urlopen(req)
-        result = f.read().decode('utf-8')
+        #req = urllib2.Request(searchUrl,data=searchQuery.encode('utf-8'))
+        #f = urllib2.urlopen(req)
+        headers = {"Content-Type": "application/x-www-form-urlencoded"}
 
-        if result:
-            log.info("Found number of PDB entries: %s" % (result.count('\n')))
+        result = requests.post(searchUrl,data=searchQuery.encode('utf-8'), headers=headers)
+        #f.read().decode('utf-8')
+
+        if result.content:
+            log.info("Found number of PDB entries: %s" % (result.content.count('\n')))
         else:
             log.info('No PDB entries found.') 
     except:
         log.error(traceback.format_exc())
     
-    return result
+    return result.content
 
 def merge_results(resultSets):        
     strSet = ""
@@ -94,19 +98,22 @@ def parse_header_prody(cfg,item):
 
 def get_ligands(cfg,item):
     try:
-        req = urllib2.Request('http://www.rcsb.org/pdb/rest/ligandInfo?structureId=%s' % item)
-        f = urllib2.urlopen(req)
-        result = f.read()
-        json_string = json.loads(xml2json.xml2json(result,optparse.Values({"pretty": False}),0))
+        req = requests.get('http://www.rcsb.org/pdb/rest/ligandInfo?structureId=%s' % item)
+        #urllib2.Request('http://www.rcsb.org/pdb/rest/ligandInfo?structureId=%s' % item)
+        #f = urllib2.urlopen(req)
+        result = req.content #f.read()
+        json_string = json.loads(xml2json.xml2json(result, optparse.Values({"pretty": False})))
         return json_string
     except:
+        print(traceback.format_exc())
         return None
 
 def get_go_terms(cfg,item):
     try:
-        req = urllib2.Request('http://www.rcsb.org/pdb/rest/goTerms?structureId=%s' % item)
-        f = urllib2.urlopen(req)
-        result = f.read()
+        req = requests.get('http://www.rcsb.org/pdb/rest/goTerms?structureId=%s' % item)
+        #urllib2.Request('http://www.rcsb.org/pdb/rest/goTerms?structureId=%s' % item)
+        #f = urllib2.urlopen(req)
+        result = req.content #f.read()
         json_string = json.loads(xml2json.xml2json(result,optparse.Values({"pretty": False}),0))
         return json_string
     except:
@@ -114,9 +121,9 @@ def get_go_terms(cfg,item):
 
 def get_file(cfg,log,item):
     try:
-        __html = urllib2.urlopen(cfg.pdbGetIdURL.format(item)).read()
+        __html = requests.get(cfg.pdbGetIdURL.format(item))
         f = open(os.path.join(cfg.extractFilesFolder,item + ".txt"), "w")
-        f.write(__html.decode('utf-8'))
+        f.write(__html.content.decode('utf-8'))
         f.close()
         return True
     except:
@@ -130,21 +137,23 @@ def get_content():
 def get_genbank_info(cfg,log,item):
     html = None
     try:
-        html = urllib2.urlopen(cfg.gbGetIdURL.format(item)).read()
+        html = requests.get(cfg.gbGetIdURL.format(item))
+        #urllib2.urlopen(cfg.gbGetIdURL.format(item)).read()
         f = open(os.path.join(cfg.extractFilesFolder,item + ".xml"), "w")
-        f.write(html)
+        f.write(html.content)
         f.close()
     except:
         log.error(traceback.format_exc())
 
-    return html
+    return html.content
 
 def get_pathways_info(cfg,log,item):
     html = None
     try:
-        html = urllib2.urlopen(cfg.keggGetURL % item).read()
+        html = requests.get(cfg.keggGetURL % item)
+        #urllib2.urlopen(cfg.keggGetURL % item).read()
     except:
-        log.error(traceback,format_exc())
+        log.error(traceback.format_exc())
 
-    return html
+    return html.content
     

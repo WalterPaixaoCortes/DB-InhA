@@ -6,7 +6,7 @@
 <div class="slider">
   <div id="coin-slider">
     {% for item in structures %}
-      <a href="#"><img src="http://www.rcsb.org/pdb/images/{{item.pdbID}}_asr_r_500.jpg" width="960" height="360" alt="" /><span><big>{{item.pdbID}}</big><br />
+      <a href="#"><img src="https://cdn.rcsb.org/images/rutgers/{{item.fld1}}/{{item.fld2}}/{{item.fld2}}.pdb1-500.jpg" width="960" height="360" alt="" /><span><big>{{item.pdbID}}</big><br />
       {{item.pdbTitle}}. Protein chains are colored from the N-terminal to the C-terminal using a rainbow (spectral) color gradient</span></a>
     {% endfor %}
   </div>
