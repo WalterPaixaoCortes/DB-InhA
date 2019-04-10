@@ -1,4 +1,4 @@
---index-url http://dcsartifacts.dell.com/artifactory/api/pypi/python/simple/ --trusted-host dcsartifacts.dell.com
+
 Flask
 Babel
 Flask-Babel
